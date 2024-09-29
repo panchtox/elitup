@@ -15,6 +15,9 @@ class Article(db.Model):
     status = db.Column(db.String(20), default="No relevante")
     is_historical = db.Column(db.Boolean, default=False)
 
+    def __init__(self, **kwargs):
+        super(Article, self).__init__(**kwargs)
+
 class Evidence(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     owner = db.Column(db.String(255), nullable=False)
@@ -25,3 +28,6 @@ class Evidence(db.Model):
     searchUrl = db.Column(db.Text, nullable=False)
     searchDate = db.Column(db.Date, nullable=False)
     articles_number = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, **kwargs):
+        super(Evidence, self).__init__(**kwargs)

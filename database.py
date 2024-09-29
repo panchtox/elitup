@@ -25,7 +25,7 @@ def populate_database():
                 db.session.add(article)
 
         # Populate Evidence
-        with open('evidence.csv', 'r') as file:
+        with open('evidence_20240928.csv', 'r') as file:
             csv_reader = csv.DictReader(file)
             for row in csv_reader:
                 evidence = Evidence(
