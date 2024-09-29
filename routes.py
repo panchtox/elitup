@@ -3,15 +3,19 @@ from models import Article, Evidence, db
 from sqlalchemy import func
 from datetime import datetime
 from report_generator import generate_report
+import logging
 
 main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
+    logging.debug("Entering index route")
     articles = Article.query.filter_by(is_historical=False).all()
+    logging.debug(f"Retrieved {len(articles)} articles from the database")
     owners = db.session.query(Article.owner.distinct()).all()
     paises = db.session.query(Article.pais.distinct()).all()
     productos = db.session.query(Article.producto.distinct()).all()
+    logging.debug(f"Retrieved {len(owners)} owners, {len(paises)} paises, and {len(productos)} productos")
     return render_template('index.html', articles=articles, owners=owners, paises=paises, productos=productos)
 
 @main.route('/classify', methods=['POST'])
