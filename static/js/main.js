@@ -63,6 +63,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     articleRow.classList.add('bold');
                 }
+                const statusCell = articleRow.querySelector('td:nth-child(7)');
+                statusCell.textContent = status;
                 modal.style.display = 'none';
             }
         });
