@@ -105,7 +105,7 @@
     </thead>
     <tbody>
         {% for article in articles %}
-        <tr data-id="{{ article.id }}" class="{% if article.status == 'Relevante' %}relevante{% elif article.status == 'Reportable' %}reportable{% else %}bold{% endif %}">
+        <tr data-id="{{ article.id }}" class="{% if article.status == 'Relevante' %}relevante{% elif article.status == 'Reportable' %}reportable{% elif article.status == 'No relevante' %}bold{% endif %}">
             <td>{{ article.owner }}</td>
             <td>{{ article.pais }}</td>
             <td>{{ article.producto }}</td>

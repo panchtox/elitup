@@ -56,8 +56,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const articleId = formData.get('article_id');
                 const status = formData.get('status');
                 const articleRow = document.querySelector(`tr[data-id="${articleId}"]`);
-                articleRow.classList.remove('bold', 'relevante', 'reportable');
-                if (status !== 'No relevante') {
+                articleRow.classList.remove('relevante', 'reportable');
+                if (status === 'No relevante') {
+                    articleRow.classList.add('bold');
+                } else {
+                    articleRow.classList.remove('bold');
                     articleRow.classList.add(status.toLowerCase());
                 }
                 modal.style.display = 'none';
@@ -73,16 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             body: formData
         })
-        .then(response => {
-            const unclassifiedCount = response.headers.get('X-Unclassified-Count');
-            if (unclassifiedCount && parseInt(unclassifiedCount) > 0) {
-                const proceed = confirm(`Hay ${unclassifiedCount} artículos sin clasificar en el período seleccionado. ¿Desea continuar?`);
-                if (!proceed) {
-                    throw new Error('Report generation cancelled');
-                }
-            }
-            return response.blob();
-        })
+        .then(response => response.blob())
         .then(blob => {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -93,11 +87,12 @@ document.addEventListener('DOMContentLoaded', function() {
             a.click();
             window.URL.revokeObjectURL(url);
             alert('Report generated and downloaded successfully.');
+            
+            // Update article list to reflect new historical status
+            location.reload();
         })
         .catch(error => {
-            if (error.message !== 'Report generation cancelled') {
-                alert('An error occurred while generating the report.');
-            }
+            alert('An error occurred while generating the report.');
         });
     });
 

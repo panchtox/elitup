@@ -97,17 +97,8 @@ def generate_report_route():
         Article.dateOfHit.between(start_date, end_date),
         Article.owner == owner,
         Article.pais == pais,
-        Article.producto.in_(productos) if 'All' not in productos else True,
-        Article.status.in_(["Relevante", "Reportable"])
+        Article.producto.in_(productos) if 'All' not in productos else True
     ).all()
-
-    unclassified = Article.query.filter(
-        Article.dateOfHit.between(start_date, end_date),
-        Article.owner == owner,
-        Article.pais == pais,
-        Article.producto.in_(productos) if 'All' not in productos else True,
-        Article.status == 'No relevante'
-    ).count()
 
     evidence = Evidence.query.filter(
         Evidence.searchDate.between(start_date, end_date),
@@ -122,9 +113,7 @@ def generate_report_route():
         article.is_historical = True
     db.session.commit()
 
-    return send_file(report_file, as_attachment=True, download_name='report.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'), {
-        'X-Unclassified-Count': str(unclassified)
-    }
+    return send_file(report_file, as_attachment=True, download_name='report.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 @main.route('/historical')
 def historical():

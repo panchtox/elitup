@@ -21,17 +21,19 @@ def generate_report(articles, evidence):
     total_articles = len(articles)
     relevant_articles = len([a for a in articles if a.status == "Relevante"])
     reportable_articles = len([a for a in articles if a.status == "Reportable"])
+    no_relevante_articles = len([a for a in articles if a.status == "No relevante"])
     
     ws_summary.append(["Report Summary"])
     ws_summary.append(["Generated on", datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
     ws_summary.append(["Total Articles", total_articles])
     ws_summary.append(["Relevant Articles", relevant_articles])
     ws_summary.append(["Reportable Articles", reportable_articles])
+    ws_summary.append(["No Relevante Articles", no_relevante_articles])
     
     # Add chart for article distribution
     pie = PieChart()
-    labels = Reference(ws_summary, min_col=1, min_row=4, max_row=5)
-    data = Reference(ws_summary, min_col=2, min_row=3, max_row=5)
+    labels = Reference(ws_summary, min_col=1, min_row=4, max_row=6)
+    data = Reference(ws_summary, min_col=2, min_row=3, max_row=6)
     pie.add_data(data, titles_from_data=True)
     pie.set_categories(labels)
     pie.title = "Article Distribution"
@@ -41,9 +43,20 @@ def generate_report(articles, evidence):
     ws_detail = wb.create_sheet("Detail")
     headers = ["Título", "Abstract", "Fecha de hit", "sourceUrl", "Categoría"]
     ws_detail.append(headers)
+    
     for a in articles:
-        abstract = a.spanishAbstract or a.englishAbstract or a.portugueseAbstract or ""
-        ws_detail.append([a.title, abstract, a.dateOfHit, a.sourceUrl, a.status])
+        if a.status in ["Relevante", "Reportable"]:
+            abstract = a.spanishAbstract or a.englishAbstract or a.portugueseAbstract or ""
+            ws_detail.append([a.title, abstract, a.dateOfHit, a.sourceUrl, a.status])
+
+    # No Relevante sheet
+    ws_no_relevante = wb.create_sheet("No Relevante")
+    ws_no_relevante.append(headers)
+    
+    for a in articles:
+        if a.status == "No relevante":
+            abstract = a.spanishAbstract or a.englishAbstract or a.portugueseAbstract or ""
+            ws_no_relevante.append([a.title, abstract, a.dateOfHit, a.sourceUrl, a.status])
 
     # Style the sheets
     for ws in wb.worksheets:
@@ -59,7 +72,7 @@ def generate_report(articles, evidence):
             ws.column_dimensions[get_column_letter(column_cells[0].column)].width = min(length + 2, 50)
 
     # Adjust row height for wrapped text
-    for ws in [ws_evidence, ws_detail]:
+    for ws in [ws_evidence, ws_detail, ws_no_relevante]:
         for row in ws.iter_rows(min_row=2):
             max_height = 0
             for cell in row:
