@@ -186,7 +186,7 @@ input[type='text'], input[type='date'], select {
     width: 100%;
 }
 
-/* New styles for owner and país span elements */
+/* Ensure owner and país fields are visible */
 #owner, #pais {
     display: inline-block;
     min-height: 20px;
