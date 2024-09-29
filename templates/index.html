@@ -52,7 +52,9 @@
             <label for="end_date">End Date:</label>
             <input type="date" name="end_date" value="{{ end_date }}">
         </div>
-        <button type="submit">Search and Filter</button>
+        <div class="form-group">
+            <button type="submit">Search and Filter</button>
+        </div>
     </form>
 </section>
 
@@ -93,7 +95,9 @@
                 {% endfor %}
             </select>
         </div>
-        <button type="submit">Generate Report</button>
+        <div class="form-group">
+            <button type="submit">Generate Report</button>
+        </div>
     </form>
 </section>
 {% endif %}

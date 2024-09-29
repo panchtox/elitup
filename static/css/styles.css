@@ -147,3 +147,22 @@ textarea {
         width: 95%;
     }
 }
+
+/* New styles for Search and Filter, and Generate Report sections */
+#search-filter form, #generate-report form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#search-filter .form-group, #generate-report .form-group {
+    flex: 1 1 200px;
+}
+
+#search-filter .form-group:first-child {
+    flex-basis: 100%;
+}
+
+input[type='text'], input[type='date'], select {
+    width: 100%;
+}
