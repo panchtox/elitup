@@ -99,7 +99,7 @@ def generate_report_route():
         Article.owner == owner,
         Article.pais == pais,
         Article.producto.in_(productos) if 'All' not in productos else True,
-        Article.status != "No clasificado"
+        Article.status != "No clasificado"  # Include all classified articles
     ).all()
 
     evidence = Evidence.query.filter(
@@ -112,8 +112,7 @@ def generate_report_route():
     report_file = generate_report(articles, evidence)
 
     for article in articles:
-        if article.status in ["Relevante", "Reportable"]:
-            article.is_historical = True
+        article.is_historical = True  # Move all classified articles to historical pool
     db.session.commit()
 
     return send_file(report_file, as_attachment=True, download_name='report.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
