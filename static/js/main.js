@@ -13,18 +13,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('articleId').value = data.id;
-                    document.getElementById('articleSourceId').value = data.articleSourceId;
+                    document.getElementById('articleSourceId').textContent = data.articleSourceId;
                     const sourceUrlLink = document.getElementById('sourceUrl');
                     sourceUrlLink.href = data.sourceUrl;
                     sourceUrlLink.textContent = 'View Source';
-                    document.getElementById('title').value = data.title;
-                    document.getElementById('englishAbstract').value = data.englishAbstract;
-                    document.getElementById('spanishAbstract').value = data.spanishAbstract;
-                    document.getElementById('portugueseAbstract').value = data.portugueseAbstract;
-                    document.getElementById('owner').value = data.owner;
-                    document.getElementById('pais').value = data.pais;
-                    document.getElementById('producto').value = data.producto;
-                    document.getElementById('dateOfHit').value = data.dateOfHit;
+                    document.getElementById('title').textContent = data.title;
+                    document.getElementById('englishAbstract').textContent = data.englishAbstract;
+                    document.getElementById('spanishAbstract').textContent = data.spanishAbstract;
+                    document.getElementById('portugueseAbstract').textContent = data.portugueseAbstract;
+                    document.getElementById('owner').textContent = data.owner;
+                    document.getElementById('pais').textContent = data.pais;
+                    document.getElementById('producto').textContent = data.producto;
+                    document.getElementById('dateOfHit').textContent = data.dateOfHit;
                     document.getElementById('status').value = data.status;
                     modal.style.display = 'block';
                 });
@@ -132,18 +132,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     .then(data => {
                         // Populate modal fields
                         document.getElementById('articleId').value = data.id;
-                        document.getElementById('articleSourceId').value = data.articleSourceId;
+                        document.getElementById('articleSourceId').textContent = data.articleSourceId;
                         const sourceUrlLink = document.getElementById('sourceUrl');
                         sourceUrlLink.href = data.sourceUrl;
                         sourceUrlLink.textContent = 'View Source';
-                        document.getElementById('title').value = data.title;
-                        document.getElementById('englishAbstract').value = data.englishAbstract;
-                        document.getElementById('spanishAbstract').value = data.spanishAbstract;
-                        document.getElementById('portugueseAbstract').value = data.portugueseAbstract;
-                        document.getElementById('owner').value = data.owner;
-                        document.getElementById('pais').value = data.pais;
-                        document.getElementById('producto').value = data.producto;
-                        document.getElementById('dateOfHit').value = data.dateOfHit;
+                        document.getElementById('title').textContent = data.title;
+                        document.getElementById('englishAbstract').textContent = data.englishAbstract;
+                        document.getElementById('spanishAbstract').textContent = data.spanishAbstract;
+                        document.getElementById('portugueseAbstract').textContent = data.portugueseAbstract;
+                        document.getElementById('owner').textContent = data.owner;
+                        document.getElementById('pais').textContent = data.pais;
+                        document.getElementById('producto').textContent = data.producto;
+                        document.getElementById('dateOfHit').textContent = data.dateOfHit;
                         document.getElementById('status').value = data.status;
                         modal.style.display = 'block';
                     });
