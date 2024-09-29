@@ -18,6 +18,24 @@ def index():
     logging.debug(f"Retrieved {len(owners)} owners, {len(paises)} paises, and {len(productos)} productos")
     return render_template('index.html', articles=articles, owners=owners, paises=paises, productos=productos)
 
+@main.route('/get_article/<int:article_id>')
+def get_article(article_id):
+    article = Article.query.get_or_404(article_id)
+    return jsonify({
+        'id': article.id,
+        'articleSourceId': article.articleSourceId,
+        'sourceUrl': article.sourceUrl,
+        'title': article.title,
+        'englishAbstract': article.englishAbstract,
+        'spanishAbstract': article.spanishAbstract,
+        'portugueseAbstract': article.portugueseAbstract,
+        'owner': article.owner,
+        'pais': article.pais,
+        'producto': article.producto,
+        'dateOfHit': article.dateOfHit.isoformat(),
+        'status': article.status
+    })
+
 @main.route('/classify', methods=['POST'])
 def classify_article():
     article_id = request.form.get('article_id')

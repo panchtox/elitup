@@ -4,12 +4,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const classifyForm = document.getElementById('classifyForm');
     const reportForm = document.getElementById('reportForm');
 
-    // Open modal
+    // Open modal and populate fields
     document.querySelectorAll('.classify-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const articleId = this.getAttribute('data-id');
-            document.getElementById('articleId').value = articleId;
-            modal.style.display = 'block';
+            fetch(`/get_article/${articleId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('articleId').value = data.id;
+                    document.getElementById('articleSourceId').value = data.articleSourceId;
+                    document.getElementById('sourceUrl').value = data.sourceUrl;
+                    document.getElementById('title').value = data.title;
+                    document.getElementById('englishAbstract').value = data.englishAbstract;
+                    document.getElementById('spanishAbstract').value = data.spanishAbstract;
+                    document.getElementById('portugueseAbstract').value = data.portugueseAbstract;
+                    document.getElementById('owner').value = data.owner;
+                    document.getElementById('pais').value = data.pais;
+                    document.getElementById('producto').value = data.producto;
+                    document.getElementById('dateOfHit').value = data.dateOfHit;
+                    document.getElementById('status').value = data.status;
+                    modal.style.display = 'block';
+                });
         });
     });
 
