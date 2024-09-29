@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(`/get_article/${articleId}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Received data:', data);
+                    console.log('Full data object:', data);
                     console.log('Owner:', data.owner);
                     console.log('País:', data.pais);
                     document.getElementById('articleId').value = data.id;
@@ -30,6 +30,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('dateOfHit').textContent = data.dateOfHit;
                     document.getElementById('status').value = data.status;
                     modal.style.display = 'block';
+
+                    // Error handling for empty owner and país fields
+                    if (!data.owner || !data.pais) {
+                        console.error('Owner or País field is empty:', { owner: data.owner, pais: data.pais });
+                        alert('Warning: Owner or País information is missing for this article.');
+                    }
                 })
                 .catch(error => {
                     console.error('Error fetching article data:', error);
@@ -137,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 fetch(`/get_article/${articleId}`)
                     .then(response => response.json())
                     .then(data => {
-                        console.log('Received data:', data);
+                        console.log('Full data object:', data);
                         console.log('Owner:', data.owner);
                         console.log('País:', data.pais);
                         document.getElementById('articleId').value = data.id;
@@ -155,6 +161,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById('dateOfHit').textContent = data.dateOfHit;
                         document.getElementById('status').value = data.status;
                         modal.style.display = 'block';
+
+                        // Error handling for empty owner and país fields
+                        if (!data.owner || !data.pais) {
+                            console.error('Owner or País field is empty:', { owner: data.owner, pais: data.pais });
+                            alert('Warning: Owner or País information is missing for this article.');
+                        }
                     })
                     .catch(error => {
                         console.error('Error fetching article data:', error);

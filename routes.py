@@ -91,6 +91,7 @@ def historical():
 @main.route('/get_article/<int:article_id>')
 def get_article(article_id):
     article = Article.query.get_or_404(article_id)
+    logging.debug(f"Fetching article {article_id}: Owner={article.owner}, País={article.pais}")
     return jsonify({
         'id': article.id,
         'articleSourceId': article.articleSourceId,
