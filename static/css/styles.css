@@ -1,25 +1,57 @@
+/* Global Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
     margin: 0;
     padding: 20px;
+    background-color: #f4f4f4;
 }
 
+h1, h2 {
+    color: #2c3e50;
+}
+
+/* Table Styles */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    border: 1px solid #e0e0e0;
+    padding: 12px;
     text-align: left;
 }
 
 th {
+    background-color: #3498db;
+    color: #fff;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
+/* Button Styles */
+button, .button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover, .button:hover {
+    background-color: #2980b9;
+}
+
+/* Modal Styles */
 .modal {
     display: none;
     position: fixed;
@@ -34,10 +66,13 @@ th {
 
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto;
+    margin: 10% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    max-width: 600px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .close {
@@ -45,15 +80,37 @@ th {
     float: right;
     font-size: 28px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: #000;
     text-decoration: none;
-    cursor: pointer;
 }
 
+/* Form Styles */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+input[type="text"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 15px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Status Colors */
 .bold {
     font-weight: bold;
 }
@@ -66,50 +123,27 @@ th {
     background-color: #ffe6e6;
 }
 
-.source-link {
-    color: #0066cc;
+/* Link Styles */
+.source-link, #sourceUrl {
+    color: #3498db;
     text-decoration: none;
 }
 
-.source-link:hover {
+.source-link:hover, #sourceUrl:hover {
     text-decoration: underline;
 }
 
-#sourceUrl {
-    color: #0066cc;
-    text-decoration: none;
-}
-
-#sourceUrl:hover {
-    text-decoration: underline;
-}
-
-/* New styles for search and filter form */
-#searchFilterForm {
-    background-color: #f8f8f8;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-}
-
-#searchFilterForm input[type="text"],
-#searchFilterForm select,
-#searchFilterForm input[type="date"] {
-    margin: 5px;
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-}
-
-#searchFilterForm button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-#searchFilterForm button:hover {
-    background-color: #45a049;
+/* Responsive Design */
+@media screen and (max-width: 600px) {
+    table {
+        font-size: 14px;
+    }
+    
+    th, td {
+        padding: 8px;
+    }
+    
+    .modal-content {
+        width: 95%;
+    }
 }

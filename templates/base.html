@@ -5,9 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Article Management System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-    {% block content %}{% endblock %}
+    <header>
+        <h1>Article Management System</h1>
+        <nav>
+            <a href="{{ url_for('main.index') }}" class="button">Current Articles</a>
+            <a href="{{ url_for('main.historical') }}" class="button">Historical Articles</a>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Article Management System. All rights reserved.</p>
+    </footer>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
