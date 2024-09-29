@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     console.log('Full data object:', data);
-                    console.log('Owner:', data.owner);
-                    console.log('País:', data.pais);
+                    console.log('Owner from API:', data.owner);
+                    console.log('País from API:', data.pais);
                     document.getElementById('articleId').value = data.id;
                     document.getElementById('articleSourceId').textContent = data.articleSourceId;
                     const sourceUrlLink = document.getElementById('sourceUrl');
@@ -24,21 +24,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('englishAbstract').textContent = data.englishAbstract;
                     document.getElementById('spanishAbstract').textContent = data.spanishAbstract;
                     document.getElementById('portugueseAbstract').textContent = data.portugueseAbstract;
+                    
+                    console.log('Owner element:', document.getElementById('owner'));
+                    console.log('País element:', document.getElementById('pais'));
                     document.getElementById('owner').textContent = data.owner || 'N/A';
                     document.getElementById('pais').textContent = data.pais || 'N/A';
+                    console.log('Owner after setting:', document.getElementById('owner').textContent);
+                    console.log('País after setting:', document.getElementById('pais').textContent);
+                    
                     document.getElementById('producto').textContent = data.producto;
                     document.getElementById('dateOfHit').textContent = data.dateOfHit;
                     document.getElementById('status').value = data.status;
                     modal.style.display = 'block';
 
-                    // New console.log statements
-                    console.log('Setting owner:', document.getElementById('owner').textContent);
-                    console.log('Setting país:', document.getElementById('pais').textContent);
-
                     // Error handling for empty owner and país fields
                     if (!data.owner || !data.pais) {
                         console.error('Owner or País field is empty:', { owner: data.owner, pais: data.pais });
-                        alert('Warning: Owner or País information is missing for this article.');
+                        alert('Error: Owner or País information is missing for this article. Please check the database.');
                     }
                 })
                 .catch(error => {
@@ -148,8 +150,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     .then(response => response.json())
                     .then(data => {
                         console.log('Full data object:', data);
-                        console.log('Owner:', data.owner);
-                        console.log('País:', data.pais);
+                        console.log('Owner from API:', data.owner);
+                        console.log('País from API:', data.pais);
                         document.getElementById('articleId').value = data.id;
                         document.getElementById('articleSourceId').textContent = data.articleSourceId;
                         const sourceUrlLink = document.getElementById('sourceUrl');
@@ -159,21 +161,23 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById('englishAbstract').textContent = data.englishAbstract;
                         document.getElementById('spanishAbstract').textContent = data.spanishAbstract;
                         document.getElementById('portugueseAbstract').textContent = data.portugueseAbstract;
+                        
+                        console.log('Owner element:', document.getElementById('owner'));
+                        console.log('País element:', document.getElementById('pais'));
                         document.getElementById('owner').textContent = data.owner || 'N/A';
                         document.getElementById('pais').textContent = data.pais || 'N/A';
+                        console.log('Owner after setting:', document.getElementById('owner').textContent);
+                        console.log('País after setting:', document.getElementById('pais').textContent);
+                        
                         document.getElementById('producto').textContent = data.producto;
                         document.getElementById('dateOfHit').textContent = data.dateOfHit;
                         document.getElementById('status').value = data.status;
                         modal.style.display = 'block';
 
-                        // New console.log statements
-                        console.log('Setting owner:', document.getElementById('owner').textContent);
-                        console.log('Setting país:', document.getElementById('pais').textContent);
-
                         // Error handling for empty owner and país fields
                         if (!data.owner || !data.pais) {
                             console.error('Owner or País field is empty:', { owner: data.owner, pais: data.pais });
-                            alert('Warning: Owner or País information is missing for this article.');
+                            alert('Error: Owner or País information is missing for this article. Please check the database.');
                         }
                     })
                     .catch(error => {
