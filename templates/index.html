@@ -106,7 +106,7 @@
     </thead>
     <tbody>
         {% for article in articles %}
-        <tr data-id="{{ article.id }}" class="{% if article.status == 'No clasificado' or article.status == 'No relevante' %}bold{% elif article.status == 'Relevante' %}relevante{% elif article.status == 'Reportable' %}reportable{% endif %}">
+        <tr data-id="{{ article.id }}" class="{% if article.status == 'No clasificado' %}bold{% elif article.status == 'Relevante' %}relevante{% elif article.status == 'Reportable' %}reportable{% endif %}">
             <td>{{ article.owner }}</td>
             <td>{{ article.pais }}</td>
             <td>{{ article.producto }}</td>
