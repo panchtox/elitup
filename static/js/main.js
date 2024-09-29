@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(`/get_article/${articleId}`)
                 .then(response => response.json())
                 .then(data => {
+                    console.log('Received data:', data);
+                    console.log('Owner:', data.owner);
+                    console.log('País:', data.pais);
                     document.getElementById('articleId').value = data.id;
                     document.getElementById('articleSourceId').textContent = data.articleSourceId;
                     const sourceUrlLink = document.getElementById('sourceUrl');
@@ -134,7 +137,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 fetch(`/get_article/${articleId}`)
                     .then(response => response.json())
                     .then(data => {
-                        // Populate modal fields
+                        console.log('Received data:', data);
+                        console.log('Owner:', data.owner);
+                        console.log('País:', data.pais);
                         document.getElementById('articleId').value = data.id;
                         document.getElementById('articleSourceId').textContent = data.articleSourceId;
                         const sourceUrlLink = document.getElementById('sourceUrl');
