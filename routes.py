@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, request, jsonify, send_file
+from flask import Blueprint, render_template, request, jsonify, send_file, make_response
 from models import Article, Evidence, db
 from sqlalchemy import func, or_
 from datetime import datetime
 from report_generator import generate_report
 import logging
+import io
 
 main = Blueprint('main', __name__)
 
@@ -119,12 +120,12 @@ def generate_report_route():
     # Updated file naming convention
     file_name = f"report_{owner}_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.xlsx"
 
-    return send_file(
-        report_file,
-        as_attachment=True,
-        download_name=file_name,
-        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
+    # Create a response object with the file content
+    response = make_response(report_file.getvalue())
+    response.headers['Content-Disposition'] = f'attachment; filename="{file_name}"'
+    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    
+    return response
 
 @main.route('/historical')
 def historical():
