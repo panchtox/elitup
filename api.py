@@ -198,3 +198,47 @@ def batch_add_evidence():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'An error occurred while saving evidence records', 'details': str(e)}), 500
+
+@api.route('/evidence', methods=['GET'])
+def get_evidence():
+    search_query = request.args.get('search', '')
+    owner_filter = request.args.get('owner', '')
+    pais_filter = request.args.get('pais', '')
+    producto_filter = request.args.get('producto', '')
+    start_date = request.args.get('start_date', '')
+    end_date = request.args.get('end_date', '')
+
+    query = Evidence.query
+
+    if search_query:
+        query = query.filter(or_(
+            Evidence.searchStrategy.ilike(f'%{search_query}%'),
+            Evidence.scope.ilike(f'%{search_query}%')
+        ))
+
+    if owner_filter:
+        query = query.filter(Evidence.owner == owner_filter)
+    if pais_filter:
+        query = query.filter(Evidence.pais == pais_filter)
+    if producto_filter:
+        query = query.filter(Evidence.producto == producto_filter)
+    if start_date:
+        query = query.filter(Evidence.searchDate >= datetime.strptime(start_date, '%Y-%m-%d').date())
+    if end_date:
+        query = query.filter(Evidence.searchDate <= datetime.strptime(end_date, '%Y-%m-%d').date())
+
+    try:
+        evidence_records = query.all()
+        return jsonify([{
+            'id': evidence.id,
+            'owner': evidence.owner,
+            'pais': evidence.pais,
+            'producto': evidence.producto,
+            'searchStrategy': evidence.searchStrategy,
+            'scope': evidence.scope,
+            'searchUrl': evidence.searchUrl,
+            'searchDate': evidence.searchDate.isoformat(),
+            'articles_number': evidence.articles_number
+        } for evidence in evidence_records])
+    except Exception as e:
+        return jsonify({'error': 'An error occurred while fetching evidence records', 'details': str(e)}), 500

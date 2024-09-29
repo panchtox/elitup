@@ -61,6 +61,19 @@ The following API endpoints are available for external integrations:
 - **Request Body**: JSON object with an `evidence` array containing evidence objects
 - **Response**: JSON object with success message or error details
 
+### Get Evidence Records
+
+- **URL**: `/api/evidence`
+- **Method**: `GET`
+- **Query Parameters**:
+  - `search`: Search query for evidence records
+  - `owner`: Filter by owner
+  - `pais`: Filter by country
+  - `producto`: Filter by product
+  - `start_date`: Filter by start date (YYYY-MM-DD)
+  - `end_date`: Filter by end date (YYYY-MM-DD)
+- **Response**: JSON array of evidence records
+
 ## Running the Application
 
 1. Install the required dependencies:
