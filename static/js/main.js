@@ -27,8 +27,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     console.log('Owner element:', document.getElementById('owner'));
                     console.log('País element:', document.getElementById('pais'));
-                    document.getElementById('owner').textContent = data.owner || 'N/A';
-                    document.getElementById('pais').textContent = data.pais || 'N/A';
+                    try {
+                        document.getElementById('owner').textContent = data.owner || 'N/A';
+                        document.getElementById('pais').textContent = data.pais || 'N/A';
+                    } catch (error) {
+                        console.error('Error setting owner or país:', error);
+                    }
                     console.log('Owner after setting:', document.getElementById('owner').textContent);
                     console.log('País after setting:', document.getElementById('pais').textContent);
                     
@@ -164,8 +168,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                         console.log('Owner element:', document.getElementById('owner'));
                         console.log('País element:', document.getElementById('pais'));
-                        document.getElementById('owner').textContent = data.owner || 'N/A';
-                        document.getElementById('pais').textContent = data.pais || 'N/A';
+                        try {
+                            document.getElementById('owner').textContent = data.owner || 'N/A';
+                            document.getElementById('pais').textContent = data.pais || 'N/A';
+                        } catch (error) {
+                            console.error('Error setting owner or país:', error);
+                        }
                         console.log('Owner after setting:', document.getElementById('owner').textContent);
                         console.log('País after setting:', document.getElementById('pais').textContent);
                         

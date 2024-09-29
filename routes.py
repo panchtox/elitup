@@ -4,7 +4,6 @@ from sqlalchemy import func, or_
 from datetime import datetime
 from report_generator import generate_report
 import logging
-import io
 
 main = Blueprint('main', __name__)
 
@@ -92,7 +91,7 @@ def historical():
 def get_article(article_id):
     article = Article.query.get_or_404(article_id)
     logging.debug(f"Fetching article {article_id}: Owner={article.owner}, País={article.pais}")
-    return jsonify({
+    response_data = {
         'id': article.id,
         'articleSourceId': article.articleSourceId,
         'sourceUrl': article.sourceUrl,
@@ -105,7 +104,9 @@ def get_article(article_id):
         'producto': article.producto,
         'dateOfHit': article.dateOfHit.isoformat(),
         'status': article.status
-    })
+    }
+    logging.debug(f"Response data: {response_data}")
+    return jsonify(response_data)
 
 @main.route('/classify', methods=['POST'])
 def classify_article():
