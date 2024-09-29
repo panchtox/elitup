@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
+            alert('Report generated and downloaded successfully.');
         })
         .catch(error => {
             alert(error.message);

@@ -125,9 +125,13 @@ def generate_report_route():
         article.is_historical = True
     db.session.commit()
 
-    return send_file(report_file, as_attachment=True, download_name='report.xlsx')
+    return send_file(report_file, as_attachment=True, download_name='report.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 @main.route('/historical')
 def historical():
     articles = Article.query.filter_by(is_historical=True).all()
     return render_template('index.html', articles=articles, historical=True)
+
+@main.route('/download_report/<filename>')
+def download_report(filename):
+    return send_file(filename, as_attachment=True, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
