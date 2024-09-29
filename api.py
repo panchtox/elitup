@@ -3,8 +3,35 @@ from models import Article, Evidence, db
 from sqlalchemy import func, or_
 from datetime import datetime
 from report_generator import generate_report
+from marshmallow import Schema, fields, ValidationError
 
 api = Blueprint('api', __name__)
+
+class ArticleSchema(Schema):
+    articleSourceId = fields.String(required=True)
+    sourceUrl = fields.Url(required=True)
+    title = fields.String(required=True)
+    englishAbstract = fields.String()
+    spanishAbstract = fields.String()
+    portugueseAbstract = fields.String()
+    owner = fields.String(required=True)
+    pais = fields.String(required=True)
+    producto = fields.String(required=True)
+    dateOfHit = fields.Date(required=True)
+    status = fields.String(validate=lambda x: x in ['No clasificado', 'No relevante', 'Relevante', 'Reportable'])
+
+class EvidenceSchema(Schema):
+    owner = fields.String(required=True)
+    pais = fields.String(required=True)
+    producto = fields.String(required=True)
+    searchStrategy = fields.String(required=True)
+    scope = fields.String(required=True)
+    searchUrl = fields.Url(required=True)
+    searchDate = fields.Date(required=True)
+    articles_number = fields.Integer(required=True)
+
+article_schema = ArticleSchema()
+evidence_schema = EvidenceSchema()
 
 @api.route('/articles', methods=['GET'])
 def get_articles():
@@ -110,3 +137,57 @@ def generate_report_api():
     db.session.commit()
 
     return jsonify({'message': 'Report generated successfully', 'file': 'report.xlsx'})
+
+@api.route('/batch/articles', methods=['POST'])
+def batch_add_articles():
+    articles_data = request.json.get('articles', [])
+    if not articles_data:
+        return jsonify({'error': 'No articles provided'}), 400
+
+    valid_articles = []
+    errors = []
+
+    for index, article_data in enumerate(articles_data):
+        try:
+            validated_data = article_schema.load(article_data)
+            valid_articles.append(Article(**validated_data))
+        except ValidationError as err:
+            errors.append({'index': index, 'errors': err.messages})
+
+    if errors:
+        return jsonify({'errors': errors}), 400
+
+    try:
+        db.session.bulk_save_objects(valid_articles)
+        db.session.commit()
+        return jsonify({'message': f'Successfully added {len(valid_articles)} articles'}), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'An error occurred while saving articles', 'details': str(e)}), 500
+
+@api.route('/batch/evidence', methods=['POST'])
+def batch_add_evidence():
+    evidence_data = request.json.get('evidence', [])
+    if not evidence_data:
+        return jsonify({'error': 'No evidence records provided'}), 400
+
+    valid_evidence = []
+    errors = []
+
+    for index, evidence_item in enumerate(evidence_data):
+        try:
+            validated_data = evidence_schema.load(evidence_item)
+            valid_evidence.append(Evidence(**validated_data))
+        except ValidationError as err:
+            errors.append({'index': index, 'errors': err.messages})
+
+    if errors:
+        return jsonify({'errors': errors}), 400
+
+    try:
+        db.session.bulk_save_objects(valid_evidence)
+        db.session.commit()
+        return jsonify({'message': f'Successfully added {len(valid_evidence)} evidence records'}), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'An error occurred while saving evidence records', 'details': str(e)}), 500

@@ -45,6 +45,20 @@ The following API endpoints are available for external integrations:
   - `productos`: Array of products or "All"
 - **Response**: JSON object with report generation status and file name
 
+### Batch Add Articles
+
+- **URL**: `/api/batch/articles`
+- **Method**: `POST`
+- **Request Body**: JSON object with an `articles` array containing article objects
+- **Response**: JSON object with success message or error details
+
+### Batch Add Evidence
+
+- **URL**: `/api/batch/evidence`
+- **Method**: `POST`
+- **Request Body**: JSON object with an `evidence` array containing evidence objects
+- **Response**: JSON object with success message or error details
+
 ## Running the Application
 
 1. Install the required dependencies:
