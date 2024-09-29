@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeBtn = document.getElementsByClassName('close')[0];
     const classifyForm = document.getElementById('classifyForm');
     const reportForm = document.getElementById('reportForm');
+    const searchFilterForm = document.getElementById('searchFilterForm');
 
     // Open modal and populate fields
     document.querySelectorAll('.classify-btn').forEach(btn => {
@@ -94,5 +95,53 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             alert(error.message);
         });
+    });
+
+    // Search and filter form submission
+    searchFilterForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const searchParams = new URLSearchParams(formData);
+        const url = `${window.location.pathname}?${searchParams.toString()}`;
+        
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newTable = doc.querySelector('table');
+                const oldTable = document.querySelector('table');
+                oldTable.innerHTML = newTable.innerHTML;
+                
+                // Re-attach event listeners to new classify buttons
+                document.querySelectorAll('.classify-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const articleId = this.getAttribute('data-id');
+                        fetch(`/get_article/${articleId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                // Populate modal fields (same as before)
+                                document.getElementById('articleId').value = data.id;
+                                document.getElementById('articleSourceId').value = data.articleSourceId;
+                                const sourceUrlLink = document.getElementById('sourceUrl');
+                                sourceUrlLink.href = data.sourceUrl;
+                                sourceUrlLink.textContent = 'View Source';
+                                document.getElementById('title').value = data.title;
+                                document.getElementById('englishAbstract').value = data.englishAbstract;
+                                document.getElementById('spanishAbstract').value = data.spanishAbstract;
+                                document.getElementById('portugueseAbstract').value = data.portugueseAbstract;
+                                document.getElementById('owner').value = data.owner;
+                                document.getElementById('pais').value = data.pais;
+                                document.getElementById('producto').value = data.producto;
+                                document.getElementById('dateOfHit').value = data.dateOfHit;
+                                document.getElementById('status').value = data.status;
+                                modal.style.display = 'block';
+                            });
+                    });
+                });
+
+                // Update URL without reloading the page
+                history.pushState(null, '', url);
+            });
     });
 });

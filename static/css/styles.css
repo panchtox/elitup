@@ -7,6 +7,7 @@ body {
 table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
 }
 
 th, td {
@@ -81,4 +82,34 @@ th {
 
 #sourceUrl:hover {
     text-decoration: underline;
+}
+
+/* New styles for search and filter form */
+#searchFilterForm {
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+#searchFilterForm input[type="text"],
+#searchFilterForm select,
+#searchFilterForm input[type="date"] {
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+#searchFilterForm button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#searchFilterForm button:hover {
+    background-color: #45a049;
 }

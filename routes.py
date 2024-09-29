@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, send_file
 from models import Article, Evidence, db
-from sqlalchemy import func
+from sqlalchemy import func, or_
 from datetime import datetime
 from report_generator import generate_report
 import logging
@@ -10,13 +10,50 @@ main = Blueprint('main', __name__)
 @main.route('/')
 def index():
     logging.debug("Entering index route")
-    articles = Article.query.filter_by(is_historical=False).all()
+    
+    search_query = request.args.get('search', '')
+    owner_filter = request.args.get('owner', '')
+    pais_filter = request.args.get('pais', '')
+    producto_filter = request.args.get('producto', '')
+    status_filter = request.args.get('status', '')
+    start_date = request.args.get('start_date', '')
+    end_date = request.args.get('end_date', '')
+
+    query = Article.query.filter_by(is_historical=False)
+
+    if search_query:
+        query = query.filter(or_(
+            Article.title.ilike(f'%{search_query}%'),
+            Article.englishAbstract.ilike(f'%{search_query}%'),
+            Article.spanishAbstract.ilike(f'%{search_query}%'),
+            Article.portugueseAbstract.ilike(f'%{search_query}%')
+        ))
+
+    if owner_filter:
+        query = query.filter(Article.owner == owner_filter)
+    if pais_filter:
+        query = query.filter(Article.pais == pais_filter)
+    if producto_filter:
+        query = query.filter(Article.producto == producto_filter)
+    if status_filter:
+        query = query.filter(Article.status == status_filter)
+    if start_date:
+        query = query.filter(Article.dateOfHit >= datetime.strptime(start_date, '%Y-%m-%d').date())
+    if end_date:
+        query = query.filter(Article.dateOfHit <= datetime.strptime(end_date, '%Y-%m-%d').date())
+
+    articles = query.all()
     logging.debug(f"Retrieved {len(articles)} articles from the database")
+
     owners = db.session.query(Article.owner.distinct()).all()
     paises = db.session.query(Article.pais.distinct()).all()
     productos = db.session.query(Article.producto.distinct()).all()
     logging.debug(f"Retrieved {len(owners)} owners, {len(paises)} paises, and {len(productos)} productos")
-    return render_template('index.html', articles=articles, owners=owners, paises=paises, productos=productos)
+
+    return render_template('index.html', articles=articles, owners=owners, paises=paises, productos=productos,
+                           search_query=search_query, owner_filter=owner_filter, pais_filter=pais_filter,
+                           producto_filter=producto_filter, status_filter=status_filter,
+                           start_date=start_date, end_date=end_date)
 
 @main.route('/get_article/<int:article_id>')
 def get_article(article_id):
