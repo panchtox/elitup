@@ -27,8 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     document.getElementById('owner').textContent = data.owner || 'N/A';
                     document.getElementById('pais').textContent = data.pais || 'N/A';
-                    console.log('Owner element:', document.getElementById('owner'));
-                    console.log('País element:', document.getElementById('pais'));
+                    console.log('Owner element after setting:', document.getElementById('owner'));
+                    console.log('País element after setting:', document.getElementById('pais'));
                     
                     document.getElementById('producto').textContent = data.producto;
                     document.getElementById('dateOfHit').textContent = data.dateOfHit;
@@ -156,8 +156,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                         document.getElementById('owner').textContent = data.owner || 'N/A';
                         document.getElementById('pais').textContent = data.pais || 'N/A';
-                        console.log('Owner element:', document.getElementById('owner'));
-                        console.log('País element:', document.getElementById('pais'));
+                        console.log('Owner element after setting:', document.getElementById('owner'));
+                        console.log('País element after setting:', document.getElementById('pais'));
                         
                         document.getElementById('producto').textContent = data.producto;
                         document.getElementById('dateOfHit').textContent = data.dateOfHit;
