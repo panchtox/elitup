@@ -98,7 +98,7 @@ def generate_report_route():
         Article.owner == owner,
         Article.pais == pais,
         Article.producto.in_(productos) if 'All' not in productos else True,
-        Article.status != 'No relevante'
+        Article.status.in_(["Relevante", "Reportable"])
     ).all()
 
     unclassified = Article.query.filter(
@@ -108,9 +108,6 @@ def generate_report_route():
         Article.producto.in_(productos) if 'All' not in productos else True,
         Article.status == 'No relevante'
     ).count()
-
-    if unclassified > 0:
-        return jsonify({'unclassified': unclassified}), 400
 
     evidence = Evidence.query.filter(
         Evidence.searchDate.between(start_date, end_date),
@@ -125,7 +122,9 @@ def generate_report_route():
         article.is_historical = True
     db.session.commit()
 
-    return send_file(report_file, as_attachment=True, download_name='report.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    return send_file(report_file, as_attachment=True, download_name='report.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'), {
+        'X-Unclassified-Count': str(unclassified)
+    }
 
 @main.route('/historical')
 def historical():

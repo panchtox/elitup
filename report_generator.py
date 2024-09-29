@@ -2,6 +2,7 @@ import io
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
+from openpyxl.chart import PieChart, Reference
 from datetime import datetime
 
 def generate_report(articles, evidence):
@@ -28,7 +29,6 @@ def generate_report(articles, evidence):
     ws_summary.append(["Reportable Articles", reportable_articles])
     
     # Add chart for article distribution
-    from openpyxl.chart import PieChart, Reference
     pie = PieChart()
     labels = Reference(ws_summary, min_col=1, min_row=4, max_row=5)
     data = Reference(ws_summary, min_col=2, min_row=3, max_row=5)
@@ -39,11 +39,11 @@ def generate_report(articles, evidence):
 
     # Detail sheet
     ws_detail = wb.create_sheet("Detail")
-    headers = ["Título", "Abstract", "Fecha de hit", "sourceUrl", "Categoría", "Owner", "País", "Producto"]
+    headers = ["Título", "Abstract", "Fecha de hit", "sourceUrl", "Categoría"]
     ws_detail.append(headers)
     for a in articles:
         abstract = a.spanishAbstract or a.englishAbstract or a.portugueseAbstract or ""
-        ws_detail.append([a.title, abstract, a.dateOfHit, a.sourceUrl, a.status, a.owner, a.pais, a.producto])
+        ws_detail.append([a.title, abstract, a.dateOfHit, a.sourceUrl, a.status])
 
     # Style the sheets
     for ws in wb.worksheets:

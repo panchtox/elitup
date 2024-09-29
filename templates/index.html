@@ -87,7 +87,7 @@
 <a href="{{ url_for('main.index') }}">Back to Current Articles</a>
 {% endif %}
 
-<h2>Articles</h2>
+<h2>{% if historical %}Historical {% endif %}Articles</h2>
 <table>
     <thead>
         <tr>
@@ -97,7 +97,10 @@
             <th>Title</th>
             <th>Date of Hit</th>
             <th>Source URL</th>
+            <th>Status</th>
+            {% if not historical %}
             <th>Action</th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -109,7 +112,10 @@
             <td>{{ article.title }}</td>
             <td>{{ article.dateOfHit }}</td>
             <td><a href="{{ article.sourceUrl }}" target="_blank" class="source-link">View Source</a></td>
+            <td>{{ article.status }}</td>
+            {% if not historical %}
             <td><button class="classify-btn" data-id="{{ article.id }}">Classify</button></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

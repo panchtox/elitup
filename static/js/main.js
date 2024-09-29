@@ -74,13 +74,14 @@ document.addEventListener('DOMContentLoaded', function() {
             body: formData
         })
         .then(response => {
-            if (response.ok) {
-                return response.blob();
-            } else {
-                return response.json().then(data => {
-                    throw new Error(`Hay ${data.unclassified} artículos sin clasificar en el período seleccionado.`);
-                });
+            const unclassifiedCount = response.headers.get('X-Unclassified-Count');
+            if (unclassifiedCount && parseInt(unclassifiedCount) > 0) {
+                const proceed = confirm(`Hay ${unclassifiedCount} artículos sin clasificar en el período seleccionado. ¿Desea continuar?`);
+                if (!proceed) {
+                    throw new Error('Report generation cancelled');
+                }
             }
+            return response.blob();
         })
         .then(blob => {
             const url = window.URL.createObjectURL(blob);
@@ -94,7 +95,9 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Report generated and downloaded successfully.');
         })
         .catch(error => {
-            alert(error.message);
+            if (error.message !== 'Report generation cancelled') {
+                alert('An error occurred while generating the report.');
+            }
         });
     });
 
