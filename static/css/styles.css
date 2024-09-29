@@ -196,3 +196,24 @@ input[type='text'], input[type='date'], select {
     padding: 5px;
     margin-left: 10px;
 }
+
+/* Sorting styles */
+.sort-icon {
+    font-size: 0.8em;
+    margin-left: 5px;
+    color: #999;
+}
+
+th[data-sort] {
+    cursor: pointer;
+}
+
+th[data-sort].asc .sort-icon::after {
+    content: '\25B2';
+    color: #333;
+}
+
+th[data-sort].desc .sort-icon::after {
+    content: '\25BC';
+    color: #333;
+}

@@ -104,16 +104,16 @@
 
 <section id="articles">
     <h2>{% if historical %}Historical {% endif %}Articles</h2>
-    <table>
+    <table id="articlesTable">
         <thead>
             <tr>
-                <th>Owner</th>
-                <th>País</th>
-                <th>Producto</th>
-                <th>Title</th>
-                <th>Date of Hit</th>
+                <th data-sort="owner">Owner <span class="sort-icon">&#8595;&#8593;</span></th>
+                <th data-sort="pais">País <span class="sort-icon">&#8595;&#8593;</span></th>
+                <th data-sort="producto">Producto <span class="sort-icon">&#8595;&#8593;</span></th>
+                <th data-sort="title">Title <span class="sort-icon">&#8595;&#8593;</span></th>
+                <th data-sort="dateOfHit">Date of Hit <span class="sort-icon">&#8595;&#8593;</span></th>
                 <th>Source URL</th>
-                <th>Status</th>
+                <th data-sort="status">Status <span class="sort-icon">&#8595;&#8593;</span></th>
                 {% if not historical %}
                 <th>Action</th>
                 {% endif %}
