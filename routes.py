@@ -1,0 +1,74 @@
+from flask import Blueprint, render_template, request, jsonify, send_file
+from models import Article, Evidence, db
+from sqlalchemy import func
+from datetime import datetime
+from report_generator import generate_report
+
+main = Blueprint('main', __name__)
+
+@main.route('/')
+def index():
+    articles = Article.query.filter_by(is_historical=False).all()
+    owners = db.session.query(Article.owner.distinct()).all()
+    paises = db.session.query(Article.pais.distinct()).all()
+    productos = db.session.query(Article.producto.distinct()).all()
+    return render_template('index.html', articles=articles, owners=owners, paises=paises, productos=productos)
+
+@main.route('/classify', methods=['POST'])
+def classify_article():
+    article_id = request.form.get('article_id')
+    status = request.form.get('status')
+    
+    article = Article.query.get(article_id)
+    if article:
+        article.status = status
+        db.session.commit()
+        return jsonify({'success': True})
+    return jsonify({'success': False}), 404
+
+@main.route('/generate_report', methods=['POST'])
+def generate_report_route():
+    start_date = datetime.strptime(request.form.get('start_date'), '%Y-%m-%d').date()
+    end_date = datetime.strptime(request.form.get('end_date'), '%Y-%m-%d').date()
+    owner = request.form.get('owner')
+    pais = request.form.get('pais')
+    productos = request.form.getlist('productos[]')
+
+    articles = Article.query.filter(
+        Article.dateOfHit.between(start_date, end_date),
+        Article.owner == owner,
+        Article.pais == pais,
+        Article.producto.in_(productos) if 'All' not in productos else True,
+        Article.status != 'No relevante'
+    ).all()
+
+    unclassified = Article.query.filter(
+        Article.dateOfHit.between(start_date, end_date),
+        Article.owner == owner,
+        Article.pais == pais,
+        Article.producto.in_(productos) if 'All' not in productos else True,
+        Article.status == 'No relevante'
+    ).count()
+
+    if unclassified > 0:
+        return jsonify({'unclassified': unclassified}), 400
+
+    evidence = Evidence.query.filter(
+        Evidence.searchDate.between(start_date, end_date),
+        Evidence.owner == owner,
+        Evidence.pais == pais,
+        Evidence.producto.in_(productos) if 'All' not in productos else True
+    ).all()
+
+    report_file = generate_report(articles, evidence)
+
+    for article in articles:
+        article.is_historical = True
+    db.session.commit()
+
+    return send_file(report_file, as_attachment=True, download_name='report.xlsx')
+
+@main.route('/historical')
+def historical():
+    articles = Article.query.filter_by(is_historical=True).all()
+    return render_template('index.html', articles=articles, historical=True)

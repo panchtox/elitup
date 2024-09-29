@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Article Management System</h1>
+
+{% if not historical %}
+<h2>Generate Report</h2>
+<form id="reportForm">
+    <label for="start_date">Start Date:</label>
+    <input type="date" id="start_date" name="start_date" required>
+    
+    <label for="end_date">End Date:</label>
+    <input type="date" id="end_date" name="end_date" required>
+    
+    <label for="owner">Owner:</label>
+    <select id="owner" name="owner" required>
+        {% for owner in owners %}
+        <option value="{{ owner[0] }}">{{ owner[0] }}</option>
+        {% endfor %}
+    </select>
+    
+    <label for="pais">País:</label>
+    <select id="pais" name="pais" required>
+        {% for pais in paises %}
+        <option value="{{ pais[0] }}">{{ pais[0] }}</option>
+        {% endfor %}
+    </select>
+    
+    <label for="productos">Productos:</label>
+    <select id="productos" name="productos[]" multiple required>
+        <option value="All">All</option>
+        {% for producto in productos %}
+        <option value="{{ producto[0] }}">{{ producto[0] }}</option>
+        {% endfor %}
+    </select>
+    
+    <button type="submit">Generate Report</button>
+</form>
+
+<a href="{{ url_for('main.historical') }}">View Historical Articles</a>
+{% else %}
+<a href="{{ url_for('main.index') }}">Back to Current Articles</a>
+{% endif %}
+
+<h2>Articles</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Owner</th>
+            <th>País</th>
+            <th>Producto</th>
+            <th>Title</th>
+            <th>Date of Hit</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for article in articles %}
+        <tr data-id="{{ article.id }}" class="{% if article.status == 'Relevante' %}relevante{% elif article.status == 'Reportable' %}reportable{% else %}bold{% endif %}">
+            <td>{{ article.owner }}</td>
+            <td>{{ article.pais }}</td>
+            <td>{{ article.producto }}</td>
+            <td>{{ article.title }}</td>
+            <td>{{ article.dateOfHit }}</td>
+            <td><button class="classify-btn" data-id="{{ article.id }}">Classify</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% include 'modal.html' %}
+{% endblock %}
