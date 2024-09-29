@@ -27,12 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     console.log('Owner element:', document.getElementById('owner'));
                     console.log('País element:', document.getElementById('pais'));
-                    try {
-                        document.getElementById('owner').textContent = data.owner || 'N/A';
-                        document.getElementById('pais').textContent = data.pais || 'N/A';
-                    } catch (error) {
-                        console.error('Error setting owner or país:', error);
-                    }
+                    document.getElementById('owner').textContent = data.owner || 'N/A';
+                    document.getElementById('pais').textContent = data.pais || 'N/A';
                     console.log('Owner after setting:', document.getElementById('owner').textContent);
                     console.log('País after setting:', document.getElementById('pais').textContent);
                     
@@ -40,12 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('dateOfHit').textContent = data.dateOfHit;
                     document.getElementById('status').value = data.status;
                     modal.style.display = 'block';
-
-                    // Error handling for empty owner and país fields
-                    if (!data.owner || !data.pais) {
-                        console.error('Owner or País field is empty:', { owner: data.owner, pais: data.pais });
-                        alert('Error: Owner or País information is missing for this article. Please check the database.');
-                    }
                 })
                 .catch(error => {
                     console.error('Error fetching article data:', error);
@@ -168,12 +158,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                         console.log('Owner element:', document.getElementById('owner'));
                         console.log('País element:', document.getElementById('pais'));
-                        try {
-                            document.getElementById('owner').textContent = data.owner || 'N/A';
-                            document.getElementById('pais').textContent = data.pais || 'N/A';
-                        } catch (error) {
-                            console.error('Error setting owner or país:', error);
-                        }
+                        document.getElementById('owner').textContent = data.owner || 'N/A';
+                        document.getElementById('pais').textContent = data.pais || 'N/A';
                         console.log('Owner after setting:', document.getElementById('owner').textContent);
                         console.log('País after setting:', document.getElementById('pais').textContent);
                         
@@ -181,12 +167,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById('dateOfHit').textContent = data.dateOfHit;
                         document.getElementById('status').value = data.status;
                         modal.style.display = 'block';
-
-                        // Error handling for empty owner and país fields
-                        if (!data.owner || !data.pais) {
-                            console.error('Owner or País field is empty:', { owner: data.owner, pais: data.pais });
-                            alert('Error: Owner or País information is missing for this article. Please check the database.');
-                        }
                     })
                     .catch(error => {
                         console.error('Error fetching article data:', error);
