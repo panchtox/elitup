@@ -6,41 +6,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchFilterForm = document.getElementById('searchFilterForm');
 
     // Open modal and populate fields
-    document.querySelectorAll('.classify-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const articleId = this.getAttribute('data-id');
-            fetch(`/get_article/${articleId}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Full data object:', data);
-                    console.log('Owner from API:', data.owner);
-                    console.log('País from API:', data.pais);
-                    document.getElementById('articleId').value = data.id;
-                    document.getElementById('articleSourceId').textContent = data.articleSourceId;
-                    const sourceUrlLink = document.getElementById('sourceUrl');
-                    sourceUrlLink.href = data.sourceUrl;
-                    sourceUrlLink.textContent = 'View Source';
-                    document.getElementById('title').textContent = data.title;
-                    document.getElementById('englishAbstract').textContent = data.englishAbstract;
-                    document.getElementById('spanishAbstract').textContent = data.spanishAbstract;
-                    document.getElementById('portugueseAbstract').textContent = data.portugueseAbstract;
-                    
-                    document.querySelector('span#owner').textContent = data.owner || 'N/A';
-                    document.querySelector('span#pais').textContent = data.pais || 'N/A';
-                    console.log('Owner element after setting:', document.querySelector('span#owner'));
-                    console.log('País element after setting:', document.querySelector('span#pais'));
-                    
-                    document.getElementById('producto').textContent = data.producto;
-                    document.getElementById('dateOfHit').textContent = data.dateOfHit;
-                    document.getElementById('status').value = data.status;
-                    modal.style.display = 'block';
-                })
-                .catch(error => {
-                    console.error('Error fetching article data:', error);
-                    alert('An error occurred while fetching article data. Please try again.');
-                });
+    function attachClassifyButtonListeners() {
+        document.querySelectorAll('.classify-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const articleId = this.getAttribute('data-id');
+                fetch(`/get_article/${articleId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Full data object:', data);
+                        document.getElementById('articleId').value = data.id;
+                        document.getElementById('articleSourceId').textContent = data.articleSourceId;
+                        const sourceUrlLink = document.getElementById('sourceUrl');
+                        sourceUrlLink.href = data.sourceUrl;
+                        sourceUrlLink.textContent = 'View Source';
+                        document.getElementById('title').textContent = data.title;
+                        document.getElementById('englishAbstract').textContent = data.englishAbstract;
+                        document.getElementById('spanishAbstract').textContent = data.spanishAbstract;
+                        document.getElementById('portugueseAbstract').textContent = data.portugueseAbstract;
+                        document.querySelector('span#owner').textContent = data.owner || 'N/A';
+                        document.querySelector('span#pais').textContent = data.pais || 'N/A';
+                        document.getElementById('producto').textContent = data.producto;
+                        document.getElementById('dateOfHit').textContent = data.dateOfHit;
+                        document.getElementById('status').value = data.status;
+                        modal.style.display = 'block';
+                    })
+                    .catch(error => {
+                        console.error('Error fetching article data:', error);
+                        alert('An error occurred while fetching article data. Please try again.');
+                    });
+            });
         });
-    });
+    }
 
     // Close modal
     closeBtn.onclick = function() {
@@ -130,46 +126,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Re-attach event listeners to new classify buttons
                 attachClassifyButtonListeners();
+                // Re-attach sorting functionality
+                attachSortingFunctionality();
             });
-    }
-
-    // Function to attach event listeners to classify buttons
-    function attachClassifyButtonListeners() {
-        document.querySelectorAll('.classify-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const articleId = this.getAttribute('data-id');
-                fetch(`/get_article/${articleId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Full data object:', data);
-                        console.log('Owner from API:', data.owner);
-                        console.log('País from API:', data.pais);
-                        document.getElementById('articleId').value = data.id;
-                        document.getElementById('articleSourceId').textContent = data.articleSourceId;
-                        const sourceUrlLink = document.getElementById('sourceUrl');
-                        sourceUrlLink.href = data.sourceUrl;
-                        sourceUrlLink.textContent = 'View Source';
-                        document.getElementById('title').textContent = data.title;
-                        document.getElementById('englishAbstract').textContent = data.englishAbstract;
-                        document.getElementById('spanishAbstract').textContent = data.spanishAbstract;
-                        document.getElementById('portugueseAbstract').textContent = data.portugueseAbstract;
-                        
-                        document.querySelector('span#owner').textContent = data.owner || 'N/A';
-                        document.querySelector('span#pais').textContent = data.pais || 'N/A';
-                        console.log('Owner element after setting:', document.querySelector('span#owner'));
-                        console.log('País element after setting:', document.querySelector('span#pais'));
-                        
-                        document.getElementById('producto').textContent = data.producto;
-                        document.getElementById('dateOfHit').textContent = data.dateOfHit;
-                        document.getElementById('status').value = data.status;
-                        modal.style.display = 'block';
-                    })
-                    .catch(error => {
-                        console.error('Error fetching article data:', error);
-                        alert('An error occurred while fetching article data. Please try again.');
-                    });
-            });
-        });
     }
 
     // Search and filter form submission
@@ -190,50 +149,57 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Re-attach event listeners to new classify buttons
                 attachClassifyButtonListeners();
+                // Re-attach sorting functionality
+                attachSortingFunctionality();
 
                 // Update URL without reloading the page
                 history.pushState(null, '', url);
             });
     });
 
+    // Sorting functionality
+    function attachSortingFunctionality() {
+        const table = document.getElementById('articlesTable');
+        const headers = table.querySelectorAll('th[data-sort]');
+        
+        headers.forEach(header => {
+            header.addEventListener('click', () => {
+                const column = header.dataset.sort;
+                const order = header.classList.contains('asc') ? 'desc' : 'asc';
+                
+                // Remove sorting classes from all headers
+                headers.forEach(h => h.classList.remove('asc', 'desc'));
+                
+                // Add sorting class to clicked header
+                header.classList.add(order);
+                
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                
+                rows.sort((a, b) => {
+                    const aValue = a.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`).textContent;
+                    const bValue = b.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`).textContent;
+                    
+                    if (column === 'dateOfHit') {
+                        return order === 'asc' ? 
+                            new Date(aValue) - new Date(bValue) : 
+                            new Date(bValue) - new Date(aValue);
+                    } else {
+                        return order === 'asc' ? 
+                            aValue.localeCompare(bValue) : 
+                            bValue.localeCompare(aValue);
+                    }
+                });
+                
+                // Reorder the rows in the table
+                rows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    }
+
     // Initial attachment of classify button listeners
     attachClassifyButtonListeners();
 
-    // Sorting functionality
-    const table = document.getElementById('articlesTable');
-    const headers = table.querySelectorAll('th[data-sort]');
-    
-    headers.forEach(header => {
-        header.addEventListener('click', () => {
-            const column = header.dataset.sort;
-            const order = header.classList.contains('asc') ? 'desc' : 'asc';
-            
-            // Remove sorting classes from all headers
-            headers.forEach(h => h.classList.remove('asc', 'desc'));
-            
-            // Add sorting class to clicked header
-            header.classList.add(order);
-            
-            const tbody = table.querySelector('tbody');
-            const rows = Array.from(tbody.querySelectorAll('tr'));
-            
-            rows.sort((a, b) => {
-                const aValue = a.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`).textContent;
-                const bValue = b.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`).textContent;
-                
-                if (column === 'dateOfHit') {
-                    return order === 'asc' ? 
-                        new Date(aValue) - new Date(bValue) : 
-                        new Date(bValue) - new Date(aValue);
-                } else {
-                    return order === 'asc' ? 
-                        aValue.localeCompare(bValue) : 
-                        bValue.localeCompare(aValue);
-                }
-            });
-            
-            // Reorder the rows in the table
-            rows.forEach(row => tbody.appendChild(row));
-        });
-    });
+    // Initial attachment of sorting functionality
+    attachSortingFunctionality();
 });
