@@ -99,7 +99,8 @@ def generate_report_route():
         Article.owner == owner,
         Article.pais == pais,
         Article.producto.in_(productos) if 'All' not in productos else True,
-        Article.status != "No clasificado"  # Include all classified articles
+        Article.status != "No clasificado",  # Include all classified articles
+        Article.is_historical == False  # Only include current (non-historical) articles
     ).all()
 
     evidence = Evidence.query.filter(
