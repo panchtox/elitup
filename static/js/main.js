@@ -31,6 +31,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('status').value = data.status;
                     modal.style.display = 'block';
 
+                    // New console.log statements
+                    console.log('Setting owner:', document.getElementById('owner').textContent);
+                    console.log('Setting país:', document.getElementById('pais').textContent);
+
                     // Error handling for empty owner and país fields
                     if (!data.owner || !data.pais) {
                         console.error('Owner or País field is empty:', { owner: data.owner, pais: data.pais });
@@ -161,6 +165,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById('dateOfHit').textContent = data.dateOfHit;
                         document.getElementById('status').value = data.status;
                         modal.style.display = 'block';
+
+                        // New console.log statements
+                        console.log('Setting owner:', document.getElementById('owner').textContent);
+                        console.log('Setting país:', document.getElementById('pais').textContent);
 
                         // Error handling for empty owner and país fields
                         if (!data.owner || !data.pais) {
