@@ -25,10 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('spanishAbstract').textContent = data.spanishAbstract;
                     document.getElementById('portugueseAbstract').textContent = data.portugueseAbstract;
                     
-                    document.getElementById('owner').textContent = data.owner || 'N/A';
-                    document.getElementById('pais').textContent = data.pais || 'N/A';
-                    console.log('Owner element after setting:', document.getElementById('owner'));
-                    console.log('País element after setting:', document.getElementById('pais'));
+                    document.querySelector('span#owner').textContent = data.owner || 'N/A';
+                    document.querySelector('span#pais').textContent = data.pais || 'N/A';
+                    console.log('Owner element after setting:', document.querySelector('span#owner'));
+                    console.log('País element after setting:', document.querySelector('span#pais'));
                     
                     document.getElementById('producto').textContent = data.producto;
                     document.getElementById('dateOfHit').textContent = data.dateOfHit;
@@ -154,10 +154,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById('spanishAbstract').textContent = data.spanishAbstract;
                         document.getElementById('portugueseAbstract').textContent = data.portugueseAbstract;
                         
-                        document.getElementById('owner').textContent = data.owner || 'N/A';
-                        document.getElementById('pais').textContent = data.pais || 'N/A';
-                        console.log('Owner element after setting:', document.getElementById('owner'));
-                        console.log('País element after setting:', document.getElementById('pais'));
+                        document.querySelector('span#owner').textContent = data.owner || 'N/A';
+                        document.querySelector('span#pais').textContent = data.pais || 'N/A';
+                        console.log('Owner element after setting:', document.querySelector('span#owner'));
+                        console.log('País element after setting:', document.querySelector('span#pais'));
                         
                         document.getElementById('producto').textContent = data.producto;
                         document.getElementById('dateOfHit').textContent = data.dateOfHit;
