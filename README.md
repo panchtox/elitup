@@ -49,7 +49,9 @@ The following API endpoints are available for external integrations:
 
 - **URL**: `/api/batch/articles`
 - **Method**: `POST`
-- **Request Body**: JSON object with an `articles` array containing article objects
+- **Request Body**: Can be either:
+  a) A JSON array of article objects: `[{"articleSourceId": "...", ...}, {...}]`
+  b) A JSON object with an `articles` key containing an array of article objects: `{"articles": [{"articleSourceId": "...", ...}, {...}]}`
 - **Response**: JSON object with success message or error details
 
 ### Batch Add Evidence
@@ -74,4 +76,3 @@ The following API endpoints are available for external integrations:
 3. Access the web interface at `http://localhost:5000`
 
 4. Use the API endpoints for external integrations
-

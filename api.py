@@ -140,7 +140,14 @@ def generate_report_api():
 
 @api.route('/batch/articles', methods=['POST'])
 def batch_add_articles():
-    articles_data = request.json.get('articles', [])
+    data = request.json
+    if isinstance(data, list):
+        articles_data = data
+    elif isinstance(data, dict):
+        articles_data = data.get('articles', [])
+    else:
+        return jsonify({'error': 'Invalid input format'}), 400
+
     if not articles_data:
         return jsonify({'error': 'No articles provided'}), 400
 
