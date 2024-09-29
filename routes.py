@@ -116,7 +116,10 @@ def generate_report_route():
         article.is_historical = True  # Move all classified articles to historical pool
     db.session.commit()
 
-    return send_file(report_file, as_attachment=True, download_name='report.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    # New file naming convention
+    file_name = f"report_{owner}_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.xlsx"
+
+    return send_file(report_file, as_attachment=True, download_name=file_name, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 @main.route('/historical')
 def historical():
