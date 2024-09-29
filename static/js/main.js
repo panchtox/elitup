@@ -71,38 +71,40 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Generate report
-    reportForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        fetch('/generate_report', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            const contentDisposition = response.headers.get('Content-Disposition');
-            const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/i);
-            const filename = filenameMatch ? filenameMatch[1] : 'report.xlsx';
-            return response.blob().then(blob => ({ blob, filename }));
-        })
-        .then(({ blob, filename }) => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            alert('Report generated and downloaded successfully.');
-            
-            // Update article list to reflect new historical status
-            updateArticleList();
-        })
-        .catch(error => {
-            console.error('Error generating report:', error);
-            alert('An error occurred while generating the report.');
+    if (reportForm) {
+        reportForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/generate_report', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                const contentDisposition = response.headers.get('Content-Disposition');
+                const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/i);
+                const filename = filenameMatch ? filenameMatch[1] : 'report.xlsx';
+                return response.blob().then(blob => ({ blob, filename }));
+            })
+            .then(({ blob, filename }) => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                alert('Report generated and downloaded successfully.');
+                
+                // Update article list to reflect new historical status
+                updateArticleList();
+            })
+            .catch(error => {
+                console.error('Error generating report:', error);
+                alert('An error occurred while generating the report.');
+            });
         });
-    });
+    }
 
     // Function to update the article list
     function updateArticleList() {

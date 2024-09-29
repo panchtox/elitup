@@ -3,7 +3,7 @@
 {% block content %}
 <section id="search-filter">
     <h2>Search and Filter</h2>
-    <form id="searchFilterForm" method="GET" action="{{ url_for('main.index') }}">
+    <form id="searchFilterForm" method="GET" action="{{ url_for('main.historical' if historical else 'main.index') }}">
         <div class="form-group">
             <input type="text" name="search" placeholder="Search articles..." value="{{ search_query }}">
         </div>

@@ -8,20 +8,7 @@ import io
 
 main = Blueprint('main', __name__)
 
-@main.route('/')
-def index():
-    logging.debug("Entering index route")
-    
-    search_query = request.args.get('search', '')
-    owner_filter = request.args.get('owner', '')
-    pais_filter = request.args.get('pais', '')
-    producto_filter = request.args.get('producto', '')
-    status_filter = request.args.get('status', '')
-    start_date = request.args.get('start_date', '')
-    end_date = request.args.get('end_date', '')
-
-    query = Article.query.filter_by(is_historical=False)
-
+def apply_filters(query, search_query, owner_filter, pais_filter, producto_filter, status_filter, start_date, end_date):
     if search_query:
         query = query.filter(or_(
             Article.title.ilike(f'%{search_query}%'),
@@ -43,6 +30,23 @@ def index():
     if end_date:
         query = query.filter(Article.dateOfHit <= datetime.strptime(end_date, '%Y-%m-%d').date())
 
+    return query
+
+@main.route('/')
+def index():
+    logging.debug("Entering index route")
+    
+    search_query = request.args.get('search', '')
+    owner_filter = request.args.get('owner', '')
+    pais_filter = request.args.get('pais', '')
+    producto_filter = request.args.get('producto', '')
+    status_filter = request.args.get('status', '')
+    start_date = request.args.get('start_date', '')
+    end_date = request.args.get('end_date', '')
+
+    query = Article.query.filter_by(is_historical=False)
+    query = apply_filters(query, search_query, owner_filter, pais_filter, producto_filter, status_filter, start_date, end_date)
+
     articles = query.all()
     logging.debug(f"Retrieved {len(articles)} articles from the database")
 
@@ -54,7 +58,35 @@ def index():
     return render_template('index.html', articles=articles, owners=owners, paises=paises, productos=productos,
                            search_query=search_query, owner_filter=owner_filter, pais_filter=pais_filter,
                            producto_filter=producto_filter, status_filter=status_filter,
-                           start_date=start_date, end_date=end_date)
+                           start_date=start_date, end_date=end_date, historical=False)
+
+@main.route('/historical')
+def historical():
+    logging.debug("Entering historical route")
+    
+    search_query = request.args.get('search', '')
+    owner_filter = request.args.get('owner', '')
+    pais_filter = request.args.get('pais', '')
+    producto_filter = request.args.get('producto', '')
+    status_filter = request.args.get('status', '')
+    start_date = request.args.get('start_date', '')
+    end_date = request.args.get('end_date', '')
+
+    query = Article.query.filter_by(is_historical=True)
+    query = apply_filters(query, search_query, owner_filter, pais_filter, producto_filter, status_filter, start_date, end_date)
+
+    articles = query.all()
+    logging.debug(f"Retrieved {len(articles)} historical articles from the database")
+
+    owners = db.session.query(Article.owner.distinct()).all()
+    paises = db.session.query(Article.pais.distinct()).all()
+    productos = db.session.query(Article.producto.distinct()).all()
+    logging.debug(f"Retrieved {len(owners)} owners, {len(paises)} paises, and {len(productos)} productos")
+
+    return render_template('index.html', articles=articles, owners=owners, paises=paises, productos=productos,
+                           search_query=search_query, owner_filter=owner_filter, pais_filter=pais_filter,
+                           producto_filter=producto_filter, status_filter=status_filter,
+                           start_date=start_date, end_date=end_date, historical=True)
 
 @main.route('/get_article/<int:article_id>')
 def get_article(article_id):
@@ -126,11 +158,6 @@ def generate_report_route():
     response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     
     return response
-
-@main.route('/historical')
-def historical():
-    articles = Article.query.filter_by(is_historical=True).all()
-    return render_template('index.html', articles=articles, historical=True)
 
 @main.route('/download_report/<filename>')
 def download_report(filename):
