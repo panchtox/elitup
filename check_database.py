@@ -8,11 +8,10 @@ def check_database():
         print(f"Number of articles in the database: {article_count}")
         
         if article_count > 0:
-            sample_article = Article.query.first()
-            if sample_article:
-                print(f"Sample article: {sample_article.title}")
-            else:
-                print("Error: Article found but unable to access its properties.")
+            print("Sample articles:")
+            sample_articles = Article.query.limit(5).all()
+            for article in sample_articles:
+                print(f"ID: {article.id}, Title: {article.title}, Owner: {article.owner}, País: {article.pais}, Producto: {article.producto}, Date of Hit: {article.dateOfHit}")
         else:
             print("No articles found in the database.")
 
