@@ -132,8 +132,8 @@ def generate_report_route():
         Article.owner == owner,
         Article.pais == pais,
         Article.producto.in_(productos) if 'All' not in productos else True,
-        Article.status != "No clasificado",  # Include all classified articles
-        Article.is_historical == False  # Only include current (non-historical) articles
+        Article.status != "No clasificado",
+        Article.is_historical == False
     ).all()
 
     evidence = Evidence.query.filter(
@@ -146,13 +146,11 @@ def generate_report_route():
     report_file = generate_report(articles, evidence)
 
     for article in articles:
-        article.is_historical = True  # Move all classified articles to historical pool
+        article.is_historical = True
     db.session.commit()
 
-    # Updated file naming convention
     file_name = f"report_{owner}_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.xlsx"
 
-    # Create a response object with the file content
     response = make_response(report_file.getvalue())
     response.headers['Content-Disposition'] = f'attachment; filename="{file_name}"'
     response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

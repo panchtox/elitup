@@ -21,12 +21,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('englishAbstract').textContent = data.englishAbstract;
                     document.getElementById('spanishAbstract').textContent = data.spanishAbstract;
                     document.getElementById('portugueseAbstract').textContent = data.portugueseAbstract;
-                    document.getElementById('owner').textContent = data.owner;
-                    document.getElementById('pais').textContent = data.pais;
+                    document.getElementById('owner').textContent = data.owner || 'N/A';
+                    document.getElementById('pais').textContent = data.pais || 'N/A';
                     document.getElementById('producto').textContent = data.producto;
                     document.getElementById('dateOfHit').textContent = data.dateOfHit;
                     document.getElementById('status').value = data.status;
                     modal.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error fetching article data:', error);
+                    alert('An error occurred while fetching article data. Please try again.');
                 });
         });
     });
@@ -140,12 +144,16 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById('englishAbstract').textContent = data.englishAbstract;
                         document.getElementById('spanishAbstract').textContent = data.spanishAbstract;
                         document.getElementById('portugueseAbstract').textContent = data.portugueseAbstract;
-                        document.getElementById('owner').textContent = data.owner;
-                        document.getElementById('pais').textContent = data.pais;
+                        document.getElementById('owner').textContent = data.owner || 'N/A';
+                        document.getElementById('pais').textContent = data.pais || 'N/A';
                         document.getElementById('producto').textContent = data.producto;
                         document.getElementById('dateOfHit').textContent = data.dateOfHit;
                         document.getElementById('status').value = data.status;
                         modal.style.display = 'block';
+                    })
+                    .catch(error => {
+                        console.error('Error fetching article data:', error);
+                        alert('An error occurred while fetching article data. Please try again.');
                     });
             });
         });
