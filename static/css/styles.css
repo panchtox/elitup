@@ -185,3 +185,14 @@ textarea {
 input[type='text'], input[type='date'], select {
     width: 100%;
 }
+
+/* New styles for owner and país span elements */
+#owner, #pais {
+    display: inline-block;
+    min-height: 20px;
+    min-width: 100px;
+    background-color: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    padding: 5px;
+    margin-left: 10px;
+}
