@@ -99,6 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
             updateArticleList();
         })
         .catch(error => {
+            console.error('Error generating report:', error);
             alert('An error occurred while generating the report.');
         });
     });
