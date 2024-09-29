@@ -13,7 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(data => {
                     document.getElementById('articleId').value = data.id;
                     document.getElementById('articleSourceId').value = data.articleSourceId;
-                    document.getElementById('sourceUrl').value = data.sourceUrl;
+                    const sourceUrlLink = document.getElementById('sourceUrl');
+                    sourceUrlLink.href = data.sourceUrl;
+                    sourceUrlLink.textContent = 'View Source';
                     document.getElementById('title').value = data.title;
                     document.getElementById('englishAbstract').value = data.englishAbstract;
                     document.getElementById('spanishAbstract').value = data.spanishAbstract;

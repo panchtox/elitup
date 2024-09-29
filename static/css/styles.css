@@ -64,3 +64,21 @@ th {
 .reportable {
     background-color: #ffe6e6;
 }
+
+.source-link {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.source-link:hover {
+    text-decoration: underline;
+}
+
+#sourceUrl {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+#sourceUrl:hover {
+    text-decoration: underline;
+}

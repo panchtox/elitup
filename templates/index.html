@@ -51,6 +51,7 @@
             <th>Producto</th>
             <th>Title</th>
             <th>Date of Hit</th>
+            <th>Source URL</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -62,6 +63,7 @@
             <td>{{ article.producto }}</td>
             <td>{{ article.title }}</td>
             <td>{{ article.dateOfHit }}</td>
+            <td><a href="{{ article.sourceUrl }}" target="_blank" class="source-link">View Source</a></td>
             <td><button class="classify-btn" data-id="{{ article.id }}">Classify</button></td>
         </tr>
         {% endfor %}
