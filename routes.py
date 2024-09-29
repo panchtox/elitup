@@ -98,7 +98,8 @@ def generate_report_route():
         Article.dateOfHit.between(start_date, end_date),
         Article.owner == owner,
         Article.pais == pais,
-        Article.producto.in_(productos) if 'All' not in productos else True
+        Article.producto.in_(productos) if 'All' not in productos else True,
+        Article.status != "No clasificado"
     ).all()
 
     evidence = Evidence.query.filter(
@@ -111,7 +112,8 @@ def generate_report_route():
     report_file = generate_report(articles, evidence)
 
     for article in articles:
-        article.is_historical = True
+        if article.status in ["Relevante", "Reportable"]:
+            article.is_historical = True
     db.session.commit()
 
     return send_file(report_file, as_attachment=True, download_name='report.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')

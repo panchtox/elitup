@@ -91,12 +91,57 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Report generated and downloaded successfully.');
             
             // Update article list to reflect new historical status
-            location.reload();
+            updateArticleList();
         })
         .catch(error => {
             alert('An error occurred while generating the report.');
         });
     });
+
+    // Function to update the article list
+    function updateArticleList() {
+        fetch(window.location.href)
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newTable = doc.querySelector('table');
+                const oldTable = document.querySelector('table');
+                oldTable.innerHTML = newTable.innerHTML;
+                
+                // Re-attach event listeners to new classify buttons
+                attachClassifyButtonListeners();
+            });
+    }
+
+    // Function to attach event listeners to classify buttons
+    function attachClassifyButtonListeners() {
+        document.querySelectorAll('.classify-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const articleId = this.getAttribute('data-id');
+                fetch(`/get_article/${articleId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Populate modal fields
+                        document.getElementById('articleId').value = data.id;
+                        document.getElementById('articleSourceId').value = data.articleSourceId;
+                        const sourceUrlLink = document.getElementById('sourceUrl');
+                        sourceUrlLink.href = data.sourceUrl;
+                        sourceUrlLink.textContent = 'View Source';
+                        document.getElementById('title').value = data.title;
+                        document.getElementById('englishAbstract').value = data.englishAbstract;
+                        document.getElementById('spanishAbstract').value = data.spanishAbstract;
+                        document.getElementById('portugueseAbstract').value = data.portugueseAbstract;
+                        document.getElementById('owner').value = data.owner;
+                        document.getElementById('pais').value = data.pais;
+                        document.getElementById('producto').value = data.producto;
+                        document.getElementById('dateOfHit').value = data.dateOfHit;
+                        document.getElementById('status').value = data.status;
+                        modal.style.display = 'block';
+                    });
+            });
+        });
+    }
 
     // Search and filter form submission
     searchFilterForm.addEventListener('submit', function(e) {
@@ -115,34 +160,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 oldTable.innerHTML = newTable.innerHTML;
                 
                 // Re-attach event listeners to new classify buttons
-                document.querySelectorAll('.classify-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const articleId = this.getAttribute('data-id');
-                        fetch(`/get_article/${articleId}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                // Populate modal fields (same as before)
-                                document.getElementById('articleId').value = data.id;
-                                document.getElementById('articleSourceId').value = data.articleSourceId;
-                                const sourceUrlLink = document.getElementById('sourceUrl');
-                                sourceUrlLink.href = data.sourceUrl;
-                                sourceUrlLink.textContent = 'View Source';
-                                document.getElementById('title').value = data.title;
-                                document.getElementById('englishAbstract').value = data.englishAbstract;
-                                document.getElementById('spanishAbstract').value = data.spanishAbstract;
-                                document.getElementById('portugueseAbstract').value = data.portugueseAbstract;
-                                document.getElementById('owner').value = data.owner;
-                                document.getElementById('pais').value = data.pais;
-                                document.getElementById('producto').value = data.producto;
-                                document.getElementById('dateOfHit').value = data.dateOfHit;
-                                document.getElementById('status').value = data.status;
-                                modal.style.display = 'block';
-                            });
-                    });
-                });
+                attachClassifyButtonListeners();
 
                 // Update URL without reloading the page
                 history.pushState(null, '', url);
             });
     });
+
+    // Initial attachment of classify button listeners
+    attachClassifyButtonListeners();
 });
