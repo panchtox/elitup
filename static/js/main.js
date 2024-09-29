@@ -56,12 +56,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const articleId = formData.get('article_id');
                 const status = formData.get('status');
                 const articleRow = document.querySelector(`tr[data-id="${articleId}"]`);
-                articleRow.classList.remove('relevante', 'reportable');
-                if (status === 'No relevante') {
-                    articleRow.classList.add('bold');
-                } else {
+                articleRow.classList.remove('relevante', 'reportable', 'no-relevante', 'no-clasificado');
+                if (status !== 'No clasificado') {
                     articleRow.classList.remove('bold');
-                    articleRow.classList.add(status.toLowerCase());
+                    articleRow.classList.add(status.toLowerCase().replace(' ', '-'));
+                } else {
+                    articleRow.classList.add('bold');
                 }
                 modal.style.display = 'none';
             }

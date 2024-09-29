@@ -35,6 +35,7 @@
     <label for="status">Status:</label>
     <select name="status">
         <option value="">All</option>
+        <option value="No clasificado" {% if status_filter == 'No clasificado' %}selected{% endif %}>No clasificado</option>
         <option value="No relevante" {% if status_filter == 'No relevante' %}selected{% endif %}>No relevante</option>
         <option value="Relevante" {% if status_filter == 'Relevante' %}selected{% endif %}>Relevante</option>
         <option value="Reportable" {% if status_filter == 'Reportable' %}selected{% endif %}>Reportable</option>
@@ -105,7 +106,7 @@
     </thead>
     <tbody>
         {% for article in articles %}
-        <tr data-id="{{ article.id }}" class="{% if article.status == 'Relevante' %}relevante{% elif article.status == 'Reportable' %}reportable{% elif article.status == 'No relevante' %}bold{% endif %}">
+        <tr data-id="{{ article.id }}" class="{% if article.status == 'No clasificado' or article.status == 'No relevante' %}bold{% elif article.status == 'Relevante' %}relevante{% elif article.status == 'Reportable' %}reportable{% endif %}">
             <td>{{ article.owner }}</td>
             <td>{{ article.pais }}</td>
             <td>{{ article.producto }}</td>

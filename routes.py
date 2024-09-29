@@ -80,9 +80,10 @@ def classify_article():
     
     article = Article.query.get(article_id)
     if article:
+        old_status = article.status
         article.status = status
         db.session.commit()
-        return jsonify({'success': True})
+        return jsonify({'success': True, 'oldStatus': old_status, 'newStatus': status})
     return jsonify({'success': False}), 404
 
 @main.route('/generate_report', methods=['POST'])

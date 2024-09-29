@@ -12,7 +12,7 @@ class Article(db.Model):
     pais = db.Column(db.String(255), nullable=False)
     producto = db.Column(db.String(255), nullable=False)
     dateOfHit = db.Column(db.Date, nullable=False)
-    status = db.Column(db.String(20), default="No relevante")
+    status = db.Column(db.String(20), default="No clasificado")
     is_historical = db.Column(db.Boolean, default=False)
 
 class Evidence(db.Model):

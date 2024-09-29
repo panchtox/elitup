@@ -74,7 +74,7 @@ def get_article(article_id):
 def classify_article(article_id):
     article = Article.query.get_or_404(article_id)
     status = request.json.get('status')
-    if status not in ['No relevante', 'Relevante', 'Reportable']:
+    if status not in ['No clasificado', 'No relevante', 'Relevante', 'Reportable']:
         return jsonify({'error': 'Invalid status'}), 400
     article.status = status
     db.session.commit()
@@ -93,20 +93,8 @@ def generate_report_api():
         Article.dateOfHit.between(start_date, end_date),
         Article.owner == owner,
         Article.pais == pais,
-        Article.producto.in_(productos) if 'All' not in productos else True,
-        Article.status != 'No relevante'
+        Article.producto.in_(productos) if 'All' not in productos else True
     ).all()
-
-    unclassified = Article.query.filter(
-        Article.dateOfHit.between(start_date, end_date),
-        Article.owner == owner,
-        Article.pais == pais,
-        Article.producto.in_(productos) if 'All' not in productos else True,
-        Article.status == 'No relevante'
-    ).count()
-
-    if unclassified > 0:
-        return jsonify({'error': f'There are {unclassified} unclassified articles in the selected period'}), 400
 
     evidence = Evidence.query.filter(
         Evidence.searchDate.between(start_date, end_date),
@@ -122,4 +110,3 @@ def generate_report_api():
     db.session.commit()
 
     return jsonify({'message': 'Report generated successfully', 'file': 'report.xlsx'})
-
