@@ -63,16 +63,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 const articleId = formData.get('article_id');
                 const status = formData.get('status');
                 const articleRow = document.querySelector(`tr[data-id="${articleId}"]`);
-                articleRow.classList.remove('relevante', 'reportable', 'no-relevante', 'no-clasificado');
-                if (status !== 'No clasificado') {
-                    articleRow.classList.remove('bold');
-                    articleRow.classList.add(status.toLowerCase().replace(' ', '-'));
-                } else {
+                articleRow.classList.remove('relevante', 'reportable', 'no-relevante', 'no-clasificado', 'bold');
+                if (status === 'Relevante' || status === 'Reportable') {
+                    articleRow.classList.add(status.toLowerCase());
+                } else if (status === 'No clasificado') {
                     articleRow.classList.add('bold');
                 }
                 const statusCell = articleRow.querySelector('td:nth-child(7)');
                 statusCell.textContent = status;
                 modal.style.display = 'none';
+
+                // Apply a temporary highlight effect
+                articleRow.style.transition = 'background-color 0.5s ease';
+                articleRow.style.backgroundColor = '#ffff99';
+                setTimeout(() => {
+                    articleRow.style.backgroundColor = '';
+                }, 1000);
             }
         });
     });

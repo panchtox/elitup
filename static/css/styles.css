@@ -135,11 +135,13 @@ textarea {
 }
 
 .relevante {
-    background-color: #e6ffe6;
+    background-color: #a8e6cf !important;
+    transition: background-color 0.5s ease;
 }
 
 .reportable {
-    background-color: #ffe6e6;
+    background-color: #ffaaa5 !important;
+    transition: background-color 0.5s ease;
 }
 
 /* Link Styles */
@@ -216,4 +218,15 @@ th[data-sort].asc .sort-icon::after {
 th[data-sort].desc .sort-icon::after {
     content: '\25BC';
     color: #333;
+}
+
+/* Hover effect for better visibility */
+tr:hover {
+    background-color: #e8f4f8;
+    transition: background-color 0.3s ease;
+}
+
+/* Emphasize status column */
+td:nth-child(7) {
+    font-weight: bold;
 }
