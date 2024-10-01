@@ -210,8 +210,8 @@ function attachSortingFunctionality() {
             rows.sort((a, b) => {
                 if (column === 'row-number') {
                     return order === 'asc' ? 
-                        a.rowIndex - b.rowIndex : 
-                        b.rowIndex - a.rowIndex;
+                        parseInt(a.querySelector('.row-number').textContent) - parseInt(b.querySelector('.row-number').textContent) : 
+                        parseInt(b.querySelector('.row-number').textContent) - parseInt(a.querySelector('.row-number').textContent);
                 }
                 const aValue = a.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`).textContent.trim();
                 const bValue = b.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`).textContent.trim();
