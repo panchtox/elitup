@@ -53,10 +53,23 @@ button, .button {
     padding: 10px 15px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-right: 5px;
 }
 
 button:hover, .button:hover {
     background-color: #2980b9;
+}
+
+.classify-btn {
+    background-color: #3498db;
+}
+
+.relevante-btn {
+    background-color: #2ecc71;
+}
+
+.reportable-btn {
+    background-color: #e74c3c;
 }
 
 /* Modal Styles */
@@ -237,4 +250,10 @@ tr:hover {
 /* Emphasize status column */
 td:nth-child(8) {
     font-weight: bold;
+}
+
+/* Quick classification buttons */
+.quick-classify-btn {
+    padding: 5px 10px;
+    font-size: 0.9em;
 }

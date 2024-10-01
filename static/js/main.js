@@ -53,15 +53,32 @@ document.addEventListener('DOMContentLoaded', function() {
     classifyForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = new FormData(this);
+        classifyArticle(formData.get('article_id'), formData.get('status'));
+    });
+
+    // Quick classify buttons
+    function attachQuickClassifyListeners() {
+        document.querySelectorAll('.quick-classify-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const articleId = this.getAttribute('data-id');
+                const status = this.getAttribute('data-status');
+                classifyArticle(articleId, status);
+            });
+        });
+    }
+
+    // Classify article function
+    function classifyArticle(articleId, status) {
         fetch('/classify', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `article_id=${articleId}&status=${status}`
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const articleId = formData.get('article_id');
-                const status = formData.get('status');
                 const articleRow = document.querySelector(`tr[data-id="${articleId}"]`);
                 articleRow.classList.remove('relevante', 'reportable', 'no-relevante', 'no-clasificado', 'bold');
                 if (status === 'Relevante' || status === 'Reportable') {
@@ -81,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 1000);
             }
         });
-    });
+    }
 
     // Generate report
     if (reportForm) {
@@ -132,6 +149,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Re-attach event listeners to new classify buttons
                 attachClassifyButtonListeners();
+                // Re-attach quick classify listeners
+                attachQuickClassifyListeners();
                 // Re-attach sorting functionality
                 attachSortingFunctionality();
                 // Update row numbers
@@ -157,6 +176,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Re-attach event listeners to new classify buttons
                 attachClassifyButtonListeners();
+                // Re-attach quick classify listeners
+                attachQuickClassifyListeners();
                 // Re-attach sorting functionality
                 attachSortingFunctionality();
                 // Update row numbers
@@ -180,6 +201,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial attachment of classify button listeners
     attachClassifyButtonListeners();
+
+    // Initial attachment of quick classify listeners
+    attachQuickClassifyListeners();
 
     // Initial attachment of sorting functionality
     attachSortingFunctionality();

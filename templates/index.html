@@ -132,7 +132,11 @@
                 <td><a href="{{ article.sourceUrl }}" target="_blank" class="source-link"><i class="fas fa-external-link-alt"></i> View Source</a></td>
                 <td>{{ article.status }}</td>
                 {% if not historical %}
-                <td><button class="classify-btn" data-id="{{ article.id }}"><i class="fas fa-edit"></i> Classify</button></td>
+                <td>
+                    <button class="classify-btn" data-id="{{ article.id }}"><i class="fas fa-edit"></i> Classify</button>
+                    <button class="quick-classify-btn relevante-btn" data-id="{{ article.id }}" data-status="Relevante">Relevante</button>
+                    <button class="quick-classify-btn reportable-btn" data-id="{{ article.id }}" data-status="Reportable">Reportable</button>
+                </td>
                 {% endif %}
             </tr>
             {% endfor %}
