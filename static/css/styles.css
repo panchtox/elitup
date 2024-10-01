@@ -37,6 +37,14 @@ tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
+/* Row number column */
+td.row-number {
+    width: 30px;
+    text-align: center;
+    font-weight: bold;
+    background-color: #f0f0f0;
+}
+
 /* Button Styles */
 button, .button {
     background-color: #3498db;
@@ -227,6 +235,6 @@ tr:hover {
 }
 
 /* Emphasize status column */
-td:nth-child(7) {
+td:nth-child(8) {
     font-weight: bold;
 }

@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else if (status === 'No clasificado') {
                     articleRow.classList.add('bold');
                 }
-                const statusCell = articleRow.querySelector('td:nth-child(7)');
+                const statusCell = articleRow.querySelector('td:nth-child(8)');
                 statusCell.textContent = status;
                 modal.style.display = 'none';
 
@@ -134,6 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 attachClassifyButtonListeners();
                 // Re-attach sorting functionality
                 attachSortingFunctionality();
+                // Update row numbers
+                updateRowNumbers();
             });
     }
 
@@ -157,11 +159,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 attachClassifyButtonListeners();
                 // Re-attach sorting functionality
                 attachSortingFunctionality();
+                // Update row numbers
+                updateRowNumbers();
 
                 // Update URL without reloading the page
                 history.pushState(null, '', url);
             });
     });
+
+    // Function to update row numbers
+    function updateRowNumbers() {
+        const rows = document.querySelectorAll('#articlesTable tbody tr');
+        rows.forEach((row, index) => {
+            const rowNumberCell = row.querySelector('.row-number');
+            if (rowNumberCell) {
+                rowNumberCell.textContent = index + 1;
+            }
+        });
+    }
 
     // Sorting functionality
     function attachSortingFunctionality() {
@@ -183,6 +198,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const rows = Array.from(tbody.querySelectorAll('tr'));
                 
                 rows.sort((a, b) => {
+                    if (column === 'row-number') {
+                        return order === 'asc' ? 
+                            a.rowIndex - b.rowIndex : 
+                            b.rowIndex - a.rowIndex;
+                    }
                     const aValue = a.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`).textContent;
                     const bValue = b.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`).textContent;
                     
@@ -199,6 +219,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Reorder the rows in the table
                 rows.forEach(row => tbody.appendChild(row));
+
+                // Update row numbers after sorting
+                updateRowNumbers();
             });
         });
     }
@@ -208,4 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial attachment of sorting functionality
     attachSortingFunctionality();
+
+    // Initial update of row numbers
+    updateRowNumbers();
 });

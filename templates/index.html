@@ -107,6 +107,7 @@
     <table id="articlesTable">
         <thead>
             <tr>
+                <th data-sort="row-number">#</th>
                 <th data-sort="owner">Owner <span class="sort-icon">&#8595;&#8593;</span></th>
                 <th data-sort="pais">País <span class="sort-icon">&#8595;&#8593;</span></th>
                 <th data-sort="producto">Producto <span class="sort-icon">&#8595;&#8593;</span></th>
@@ -122,6 +123,7 @@
         <tbody>
             {% for article in articles %}
             <tr data-id="{{ article.id }}" class="{% if article.status == 'No clasificado' %}bold{% elif article.status == 'Relevante' %}relevante{% elif article.status == 'Reportable' %}reportable{% endif %}">
+                <td class="row-number"></td>
                 <td>{{ article.owner }}</td>
                 <td>{{ article.pais }}</td>
                 <td>{{ article.producto }}</td>
