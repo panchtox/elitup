@@ -178,54 +178,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Sorting functionality
-    function attachSortingFunctionality() {
-        const table = document.getElementById('articlesTable');
-        const headers = table.querySelectorAll('th[data-sort]');
-        
-        headers.forEach(header => {
-            header.addEventListener('click', () => {
-                const column = header.dataset.sort;
-                const order = header.classList.contains('asc') ? 'desc' : 'asc';
-                
-                // Remove sorting classes from all headers
-                headers.forEach(h => h.classList.remove('asc', 'desc'));
-                
-                // Add sorting class to clicked header
-                header.classList.add(order);
-                
-                const tbody = table.querySelector('tbody');
-                const rows = Array.from(tbody.querySelectorAll('tr'));
-                
-                rows.sort((a, b) => {
-                    if (column === 'row-number') {
-                        return order === 'asc' ? 
-                            a.rowIndex - b.rowIndex : 
-                            b.rowIndex - a.rowIndex;
-                    }
-                    const aValue = a.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`).textContent;
-                    const bValue = b.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`).textContent;
-                    
-                    if (column === 'dateOfHit') {
-                        return order === 'asc' ? 
-                            new Date(aValue) - new Date(bValue) : 
-                            new Date(bValue) - new Date(aValue);
-                    } else {
-                        return order === 'asc' ? 
-                            aValue.localeCompare(bValue) : 
-                            bValue.localeCompare(aValue);
-                    }
-                });
-                
-                // Reorder the rows in the table
-                rows.forEach(row => tbody.appendChild(row));
-
-                // Update row numbers after sorting
-                updateRowNumbers();
-            });
-        });
-    }
-
     // Initial attachment of classify button listeners
     attachClassifyButtonListeners();
 
@@ -235,3 +187,56 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial update of row numbers
     updateRowNumbers();
 });
+
+// Sorting functionality
+function attachSortingFunctionality() {
+    const table = document.getElementById('articlesTable');
+    const headers = table.querySelectorAll('th[data-sort]');
+    
+    headers.forEach(header => {
+        header.addEventListener('click', () => {
+            const column = header.dataset.sort;
+            const order = header.classList.contains('asc') ? 'desc' : 'asc';
+            
+            // Remove sorting classes from all headers
+            headers.forEach(h => h.classList.remove('asc', 'desc'));
+            
+            // Add sorting class to clicked header
+            header.classList.add(order);
+            
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            rows.sort((a, b) => {
+                if (column === 'row-number') {
+                    return order === 'asc' ? 
+                        a.rowIndex - b.rowIndex : 
+                        b.rowIndex - a.rowIndex;
+                }
+                const aValue = a.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`).textContent.trim();
+                const bValue = b.querySelector(`td:nth-child(${Array.from(headers).indexOf(header) + 1})`).textContent.trim();
+                
+                if (column === 'dateOfHit') {
+                    return order === 'asc' ? 
+                        new Date(aValue) - new Date(bValue) : 
+                        new Date(bValue) - new Date(aValue);
+                } else if (column === 'status') {
+                    const statusOrder = ['No clasificado', 'No relevante', 'Relevante', 'Reportable'];
+                    return order === 'asc' ?
+                        statusOrder.indexOf(aValue) - statusOrder.indexOf(bValue) :
+                        statusOrder.indexOf(bValue) - statusOrder.indexOf(aValue);
+                } else {
+                    return order === 'asc' ? 
+                        aValue.localeCompare(bValue) : 
+                        bValue.localeCompare(aValue);
+                }
+            });
+            
+            // Reorder the rows in the table
+            rows.forEach(row => tbody.appendChild(row));
+
+            // Update row numbers after sorting
+            updateRowNumbers();
+        });
+    });
+}
