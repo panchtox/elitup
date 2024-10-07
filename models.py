@@ -14,6 +14,7 @@ class Article(db.Model):
     dateOfHit = db.Column(db.Date, nullable=False)
     status = db.Column(db.String(20), default="No clasificado")
     is_historical = db.Column(db.Boolean, default=False)
+    comments = db.Column(db.Text)  # New field for comments
 
 class Evidence(db.Model):
     id = db.Column(db.Integer, primary_key=True)

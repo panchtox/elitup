@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const reportForm = document.getElementById('reportForm');
     const searchFilterForm = document.getElementById('searchFilterForm');
 
-    // Open modal and populate fields
     function attachClassifyButtonListeners() {
         document.querySelectorAll('.classify-btn').forEach(btn => {
             btn.addEventListener('click', function() {
@@ -28,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById('producto').textContent = data.producto;
                         document.getElementById('dateOfHit').textContent = data.dateOfHit;
                         document.getElementById('status').value = data.status;
+                        document.getElementById('comments').value = data.comments || '';
                         modal.style.display = 'block';
                     })
                     .catch(error => {
@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Close modal
     closeBtn.onclick = function() {
         modal.style.display = 'none';
     }
@@ -49,32 +48,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Classify article
     classifyForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = new FormData(this);
-        classifyArticle(formData.get('article_id'), formData.get('status'));
+        classifyArticle(formData.get('article_id'), formData.get('status'), formData.get('comments'));
     });
 
-    // Quick classify buttons
     function attachQuickClassifyListeners() {
         document.querySelectorAll('.quick-classify-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const articleId = this.getAttribute('data-id');
                 const status = this.getAttribute('data-status');
-                classifyArticle(articleId, status);
+                classifyArticle(articleId, status, '');
             });
         });
     }
 
-    // Classify article function
-    function classifyArticle(articleId, status) {
+    function classifyArticle(articleId, status, comments) {
         fetch('/classify', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: `article_id=${articleId}&status=${status}`
+            body: `article_id=${articleId}&status=${status}&comments=${encodeURIComponent(comments)}`
         })
         .then(response => response.json())
         .then(data => {
@@ -90,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 statusCell.textContent = status;
                 modal.style.display = 'none';
 
-                // Apply a temporary highlight effect
                 articleRow.style.transition = 'background-color 0.5s ease';
                 articleRow.style.backgroundColor = '#ffff99';
                 setTimeout(() => {
@@ -100,7 +95,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Generate report
     if (reportForm) {
         reportForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -126,7 +120,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.URL.revokeObjectURL(url);
                 alert('Report generated and downloaded successfully.');
                 
-                // Update article list to reflect new historical status
                 updateArticleList();
             })
             .catch(error => {
@@ -136,7 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Function to update the article list
     function updateArticleList() {
         fetch(window.location.href)
             .then(response => response.text())
@@ -147,18 +139,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 const oldTable = document.querySelector('table');
                 oldTable.innerHTML = newTable.innerHTML;
                 
-                // Re-attach event listeners to new classify buttons
                 attachClassifyButtonListeners();
-                // Re-attach quick classify listeners
                 attachQuickClassifyListeners();
-                // Re-attach sorting functionality
                 attachSortingFunctionality();
-                // Update row numbers
                 updateRowNumbers();
             });
     }
 
-    // Search and filter form submission
     searchFilterForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = new FormData(this);
@@ -174,21 +161,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 const oldTable = document.querySelector('table');
                 oldTable.innerHTML = newTable.innerHTML;
                 
-                // Re-attach event listeners to new classify buttons
                 attachClassifyButtonListeners();
-                // Re-attach quick classify listeners
                 attachQuickClassifyListeners();
-                // Re-attach sorting functionality
                 attachSortingFunctionality();
-                // Update row numbers
                 updateRowNumbers();
 
-                // Update URL without reloading the page
                 history.pushState(null, '', url);
             });
     });
 
-    // Function to update row numbers
     function updateRowNumbers() {
         const rows = document.querySelectorAll('#articlesTable tbody tr');
         rows.forEach((row, index) => {
@@ -199,20 +180,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Initial attachment of classify button listeners
     attachClassifyButtonListeners();
-
-    // Initial attachment of quick classify listeners
     attachQuickClassifyListeners();
-
-    // Initial attachment of sorting functionality
     attachSortingFunctionality();
-
-    // Initial update of row numbers
     updateRowNumbers();
 });
 
-// Sorting functionality
 function attachSortingFunctionality() {
     const table = document.getElementById('articlesTable');
     const headers = table.querySelectorAll('th[data-sort]');
@@ -222,10 +195,8 @@ function attachSortingFunctionality() {
             const column = header.dataset.sort;
             const order = header.classList.contains('asc') ? 'desc' : 'asc';
             
-            // Remove sorting classes from all headers
             headers.forEach(h => h.classList.remove('asc', 'desc'));
             
-            // Add sorting class to clicked header
             header.classList.add(order);
             
             const tbody = table.querySelector('tbody');
@@ -256,10 +227,8 @@ function attachSortingFunctionality() {
                 }
             });
             
-            // Reorder the rows in the table
             rows.forEach(row => tbody.appendChild(row));
 
-            // Update row numbers after sorting
             updateRowNumbers();
         });
     });

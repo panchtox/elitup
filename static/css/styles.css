@@ -50,10 +50,14 @@ button, .button {
     background-color: #3498db;
     color: #fff;
     border: none;
-    padding: 10px 15px;
+    padding: 8px 12px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-right: 5px;
+    width: 110px; /* Set a fixed width for all buttons */
+    font-size: 14px;
+    text-align: center;
+    display: inline-block;
 }
 
 button:hover, .button:hover {
@@ -188,6 +192,11 @@ textarea {
     .modal-content {
         width: 95%;
     }
+
+    button, .button {
+        width: 100%; /* Full width for mobile */
+        margin-bottom: 5px;
+    }
 }
 
 /* New styles for Search and Filter, and Generate Report sections */
@@ -254,6 +263,7 @@ td:nth-child(8) {
 
 /* Quick classification buttons */
 .quick-classify-btn {
-    padding: 5px 10px;
-    font-size: 0.9em;
+    padding: 8px 12px;
+    font-size: 14px;
+    width: 110px; /* Set the same width as other buttons */
 }

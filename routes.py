@@ -103,7 +103,8 @@ def get_article(article_id):
         'pais': article.pais,
         'producto': article.producto,
         'dateOfHit': article.dateOfHit.isoformat(),
-        'status': article.status
+        'status': article.status,
+        'comments': article.comments
     }
     logging.debug(f"Response data: {response_data}")
     return jsonify(response_data)
@@ -112,11 +113,13 @@ def get_article(article_id):
 def classify_article():
     article_id = request.form.get('article_id')
     status = request.form.get('status')
+    comments = request.form.get('comments')
     
     article = Article.query.get(article_id)
     if article:
         old_status = article.status
         article.status = status
+        article.comments = comments
         db.session.commit()
         return jsonify({'success': True, 'oldStatus': old_status, 'newStatus': status})
     return jsonify({'success': False}), 404
