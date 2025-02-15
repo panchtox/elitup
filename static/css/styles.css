@@ -69,11 +69,11 @@ button:hover, .button:hover {
 }
 
 .relevante-btn {
-    background-color: #2ecc71;
+    background-color: #998ec3;
 }
 
 .reportable-btn {
-    background-color: #e74c3c;
+    background-color: #f1a340;
 }
 
 /* Modal Styles */
@@ -160,12 +160,12 @@ textarea {
 }
 
 .relevante {
-    background-color: #a8e6cf !important;
+    background-color: #c6c0de !important;
     transition: background-color 0.5s ease;
 }
 
 .reportable {
-    background-color: #ffaaa5 !important;
+    background-color: #f6c587!important;
     transition: background-color 0.5s ease;
 }
 
